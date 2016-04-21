@@ -1,1 +1,5 @@
+github "mxcl/OMGHTTPURLRQ" "3.1.1"
+github "Hearst-DD/ObjectMapper" "1.2.0"
+github "SwiftyJSON/SwiftyJSON" "2.3.3"
 github "socketio/socket.io-client-swift" "v6.1.0"
+github "mxcl/PromiseKit" "3.1.1"

@@ -13,6 +13,24 @@
 		985C5C791CC4954E00D2BFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C781CC4954E00D2BFE8 /* Assets.xcassets */; };
 		985C5C7C1CC4954E00D2BFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C7A1CC4954E00D2BFE8 /* LaunchScreen.storyboard */; };
 		985C5C871CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C861CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift */; };
+		985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */; };
+		985C5C971CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */; };
+		98B12B3A1CC72A230016F1E5 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */; };
+		98B12B3B1CC72A230016F1E5 /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */; };
+		98B12B3C1CC72A230016F1E5 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; };
+		98B12B461CC73BBF0016F1E5 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */; };
+		98B12B471CC73BBF0016F1E5 /* PromiseKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		98B12B481CC73BD70016F1E5 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */; };
+		98B12B4A1CC791260016F1E5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12B491CC791260016F1E5 /* Message.swift */; };
+		98EFF65A1CC6191500C4C5D3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EFF6591CC6191500C4C5D3 /* User.swift */; };
+		98EFF65C1CC6284200C4C5D3 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; };
+		98EFF65D1CC6284200C4C5D3 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		98EFF65F1CC62C7700C4C5D3 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EFF65E1CC62C7700C4C5D3 /* Utility.swift */; };
+		98EFF6611CC6344500C4C5D3 /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */; };
+		98EFF6621CC6344500C4C5D3 /* SocketIOClientSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		98EFF6641CC63D5900C4C5D3 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EFF6631CC63D5900C4C5D3 /* Room.swift */; };
+		98EFF6661CC675FA00C4C5D3 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */; };
+		98EFF6671CC675FA00C4C5D3 /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +43,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		985C5C9E1CC49D0000D2BFE8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				98EFF6671CC675FA00C4C5D3 /* ObjectMapper.framework in Embed Frameworks */,
+				98EFF6621CC6344500C4C5D3 /* SocketIOClientSwift.framework in Embed Frameworks */,
+				98EFF65D1CC6284200C4C5D3 /* SwiftyJSON.framework in Embed Frameworks */,
+				98B12B471CC73BBF0016F1E5 /* PromiseKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		985C5C6E1CC4954E00D2BFE8 /* Chime.IO-Client-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chime.IO-Client-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -36,6 +71,15 @@
 		985C5C821CC4954E00D2BFE8 /* Chime.IO-Client-SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chime.IO-Client-SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		985C5C861CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chime_IO_Client_SwiftTests.swift; sourceTree = "<group>"; };
 		985C5C881CC4954E00D2BFE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChimeIOAPI.swift; sourceTree = "<group>"; };
+		98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
+		98B12B491CC791260016F1E5 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		98EFF6591CC6191500C4C5D3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		98EFF65E1CC62C7700C4C5D3 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIOClientSwift.framework; path = Carthage/Build/iOS/SocketIOClientSwift.framework; sourceTree = "<group>"; };
+		98EFF6631CC63D5900C4C5D3 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
+		98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/iOS/ObjectMapper.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +87,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98EFF6661CC675FA00C4C5D3 /* ObjectMapper.framework in Frameworks */,
+				98EFF6611CC6344500C4C5D3 /* SocketIOClientSwift.framework in Frameworks */,
+				98EFF65C1CC6284200C4C5D3 /* SwiftyJSON.framework in Frameworks */,
+				98B12B461CC73BBF0016F1E5 /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,6 +98,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98B12B3A1CC72A230016F1E5 /* ObjectMapper.framework in Frameworks */,
+				98B12B481CC73BD70016F1E5 /* PromiseKit.framework in Frameworks */,
+				98B12B3B1CC72A230016F1E5 /* SocketIOClientSwift.framework in Frameworks */,
+				98B12B3C1CC72A230016F1E5 /* SwiftyJSON.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,6 +111,7 @@
 		985C5C651CC4954E00D2BFE8 = {
 			isa = PBXGroup;
 			children = (
+				98B12B381CC728840016F1E5 /* Frameworks */,
 				985C5C701CC4954E00D2BFE8 /* Chime.IO-Client-Swift */,
 				985C5C851CC4954E00D2BFE8 /* Chime.IO-Client-SwiftTests */,
 				985C5C6F1CC4954E00D2BFE8 /* Products */,
@@ -79,6 +132,7 @@
 			children = (
 				985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */,
 				985C5C731CC4954E00D2BFE8 /* ViewController.swift */,
+				985C5C911CC497CB00D2BFE8 /* ChimeIO */,
 				985C5C751CC4954E00D2BFE8 /* Main.storyboard */,
 				985C5C781CC4954E00D2BFE8 /* Assets.xcassets */,
 				985C5C7A1CC4954E00D2BFE8 /* LaunchScreen.storyboard */,
@@ -96,6 +150,37 @@
 			path = "Chime.IO-Client-SwiftTests";
 			sourceTree = "<group>";
 		};
+		985C5C911CC497CB00D2BFE8 /* ChimeIO */ = {
+			isa = PBXGroup;
+			children = (
+				98EFF65E1CC62C7700C4C5D3 /* Utility.swift */,
+				985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */,
+				985C5C981CC49A6D00D2BFE8 /* Model */,
+			);
+			name = ChimeIO;
+			sourceTree = "<group>";
+		};
+		985C5C981CC49A6D00D2BFE8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				98EFF6591CC6191500C4C5D3 /* User.swift */,
+				98EFF6631CC63D5900C4C5D3 /* Room.swift */,
+				98B12B491CC791260016F1E5 /* Message.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		98B12B381CC728840016F1E5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */,
+				98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */,
+				98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */,
+				98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -106,6 +191,8 @@
 				985C5C6A1CC4954E00D2BFE8 /* Sources */,
 				985C5C6B1CC4954E00D2BFE8 /* Frameworks */,
 				985C5C6C1CC4954E00D2BFE8 /* Resources */,
+				985C5C9E1CC49D0000D2BFE8 /* Embed Frameworks */,
+				98B12B391CC729230016F1E5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -192,13 +279,37 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		98B12B391CC729230016F1E5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/ObjectMapper.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SocketIOClientSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		985C5C6A1CC4954E00D2BFE8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98EFF65A1CC6191500C4C5D3 /* User.swift in Sources */,
 				985C5C741CC4954E00D2BFE8 /* ViewController.swift in Sources */,
+				98EFF6641CC63D5900C4C5D3 /* Room.swift in Sources */,
+				98EFF65F1CC62C7700C4C5D3 /* Utility.swift in Sources */,
+				985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
 				985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */,
+				98B12B4A1CC791260016F1E5 /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				985C5C971CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
 				985C5C871CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,6 +441,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Chime.IO-Client-Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JmeHsieh.Chime-IO-Client-Swift";
@@ -340,6 +456,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Chime.IO-Client-Swift/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JmeHsieh.Chime-IO-Client-Swift";
@@ -351,6 +471,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Chime.IO-Client-SwiftTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JmeHsieh.Chime-IO-Client-SwiftTests";
@@ -363,6 +487,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = "Chime.IO-Client-SwiftTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "JmeHsieh.Chime-IO-Client-SwiftTests";
@@ -390,6 +518,7 @@
 				985C5C8D1CC4954E00D2BFE8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		985C5C8E1CC4954E00D2BFE8 /* Build configuration list for PBXNativeTarget "Chime.IO-Client-SwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -398,6 +527,7 @@
 				985C5C901CC4954E00D2BFE8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
