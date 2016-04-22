@@ -22,6 +22,9 @@
 		98B12B471CC73BBF0016F1E5 /* PromiseKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		98B12B481CC73BD70016F1E5 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */; };
 		98B12B4A1CC791260016F1E5 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98B12B491CC791260016F1E5 /* Message.swift */; };
+		98CFDCC61CCA064400200BDB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; };
+		98CFDCC71CCA064400200BDB /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		98CFDCC81CCA069C00200BDB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; };
 		98EFF65A1CC6191500C4C5D3 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98EFF6591CC6191500C4C5D3 /* User.swift */; };
 		98EFF65C1CC6284200C4C5D3 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; };
 		98EFF65D1CC6284200C4C5D3 /* SwiftyJSON.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -50,6 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				98CFDCC71CCA064400200BDB /* RxSwift.framework in Embed Frameworks */,
 				98EFF6671CC675FA00C4C5D3 /* ObjectMapper.framework in Embed Frameworks */,
 				98EFF6621CC6344500C4C5D3 /* SocketIOClientSwift.framework in Embed Frameworks */,
 				98EFF65D1CC6284200C4C5D3 /* SwiftyJSON.framework in Embed Frameworks */,
@@ -74,6 +78,7 @@
 		985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChimeIOAPI.swift; sourceTree = "<group>"; };
 		98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		98B12B491CC791260016F1E5 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		98CFDCC51CCA064400200BDB /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		98EFF6591CC6191500C4C5D3 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		98EFF65E1CC62C7700C4C5D3 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
@@ -87,6 +92,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98CFDCC61CCA064400200BDB /* RxSwift.framework in Frameworks */,
 				98EFF6661CC675FA00C4C5D3 /* ObjectMapper.framework in Frameworks */,
 				98EFF6611CC6344500C4C5D3 /* SocketIOClientSwift.framework in Frameworks */,
 				98EFF65C1CC6284200C4C5D3 /* SwiftyJSON.framework in Frameworks */,
@@ -100,6 +106,7 @@
 			files = (
 				98B12B3A1CC72A230016F1E5 /* ObjectMapper.framework in Frameworks */,
 				98B12B481CC73BD70016F1E5 /* PromiseKit.framework in Frameworks */,
+				98CFDCC81CCA069C00200BDB /* RxSwift.framework in Frameworks */,
 				98B12B3B1CC72A230016F1E5 /* SocketIOClientSwift.framework in Frameworks */,
 				98B12B3C1CC72A230016F1E5 /* SwiftyJSON.framework in Frameworks */,
 			);
@@ -175,6 +182,7 @@
 			children = (
 				98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */,
 				98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */,
+				98CFDCC51CCA064400200BDB /* RxSwift.framework */,
 				98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */,
 				98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */,
 			);
@@ -289,6 +297,8 @@
 				"$(SRCROOT)/Carthage/Build/iOS/ObjectMapper.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SocketIOClientSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 			);
 			outputPaths = (
 			);
