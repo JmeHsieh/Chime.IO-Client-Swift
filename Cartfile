@@ -1,5 +1,6 @@
 github "Hearst-DD/ObjectMapper" ~> 1.2
 github "mxcl/PromiseKit" ~> 3.1.1
 github "ReactiveX/RxSwift" ~> 2.4
+github "SnapKit/SnapKit" ~> 0.20.0
 github "socketio/socket.io-client-swift" ~> 6.1.0
 github "SwiftyJSON/SwiftyJSON" ~> 2.3.3
