@@ -26,6 +26,7 @@ enum SocketEvent: String {
 enum ChimeIOAPIError: ErrorType {
     case GuardError(String)
     case JSONError(String)
+    case OtherError(String)
 }
 
 
@@ -88,7 +89,7 @@ class ChimeIOAPI {
             print("authenticated")
         }
         socket.on(SocketEvent.Unauthorized.rawValue) { result, ack in
-            print("unauthenticated")
+            print("unauthorized")
         }
     }
     
@@ -146,6 +147,9 @@ class ChimeIOAPI {
                     reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
+            socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
+                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
+            }
             
             let params = ["type": "local", "email": email, "password": password]
             socket.emit(SocketEvent.Authenticate.rawValue, params)
@@ -162,6 +166,9 @@ class ChimeIOAPI {
                 } else {
                     reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
+            }
+            socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
+                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
             }
             
             let params = ["token": jwt]
