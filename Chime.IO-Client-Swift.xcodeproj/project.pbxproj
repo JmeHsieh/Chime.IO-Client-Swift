@@ -25,6 +25,7 @@
 		98CF322F1CCA2D6D009EFB3B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */; };
 		98CF32301CCA2D6D009EFB3B /* RxCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		98CF32311CCA2D7D009EFB3B /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */; };
+		98CF32331CCA5E50009EFB3B /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98CF32321CCA5E50009EFB3B /* LoginViewModel.swift */; };
 		98CFDCC61CCA064400200BDB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; };
 		98CFDCC71CCA064400200BDB /* RxSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		98CFDCC81CCA069C00200BDB /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98CFDCC51CCA064400200BDB /* RxSwift.framework */; };
@@ -86,8 +87,8 @@
 		985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChimeIOAPI.swift; sourceTree = "<group>"; };
 		98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		98B12B491CC791260016F1E5 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		98CF322C1CCA2D59009EFB3B /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		98CF32321CCA5E50009EFB3B /* LoginViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		98CFDCC51CCA064400200BDB /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		98CFDCCD1CCA188000200BDB /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		98CFDCCF1CCA189200200BDB /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
@@ -134,7 +135,6 @@
 		985C5C651CC4954E00D2BFE8 = {
 			isa = PBXGroup;
 			children = (
-				98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */,
 				98B12B381CC728840016F1E5 /* Frameworks */,
 				985C5C701CC4954E00D2BFE8 /* Chime.IO-Client-Swift */,
 				985C5C851CC4954E00D2BFE8 /* Chime.IO-Client-SwiftTests */,
@@ -155,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */,
+				98CF32321CCA5E50009EFB3B /* LoginViewModel.swift */,
 				985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */,
 				985C5C911CC497CB00D2BFE8 /* ChimeIO */,
 				985C5C751CC4954E00D2BFE8 /* Main.storyboard */,
@@ -197,11 +198,11 @@
 		98B12B381CC728840016F1E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				98CF322C1CCA2D59009EFB3B /* RxCocoa.framework */,
 				98CFDCCD1CCA188000200BDB /* SnapKit.framework */,
 				98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */,
 				98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */,
 				98CFDCC51CCA064400200BDB /* RxSwift.framework */,
+				98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */,
 				98CFDCCF1CCA189200200BDB /* SnapKit.framework */,
 				98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */,
 				98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */,
@@ -337,6 +338,7 @@
 				985C5C741CC4954E00D2BFE8 /* LoginViewController.swift in Sources */,
 				98EFF6641CC63D5900C4C5D3 /* Room.swift in Sources */,
 				98EFF65F1CC62C7700C4C5D3 /* Utility.swift in Sources */,
+				98CF32331CCA5E50009EFB3B /* LoginViewModel.swift in Sources */,
 				985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
 				985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */,
 				98B12B4A1CC791260016F1E5 /* Message.swift in Sources */,
