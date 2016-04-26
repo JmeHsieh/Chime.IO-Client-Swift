@@ -8,24 +8,31 @@
 
 import UIKit
 import PromiseKit
-import RxSwift
 import RxCocoa
+import RxSwift
 import SnapKit
 
 class LoginViewController: UIViewController {
     
-    // MARK: -  Properties
-    
-    let disposeBag = DisposeBag()
     var emailTextField: UITextField?
     var passwordTextField: UITextField?
+    var sendButton: UIButton?
+    var spinner: UIActivityIndicatorView?
     
+    lazy var disposeBag = DisposeBag()
+    var viewModel: LoginViewModel!
     
-    // MARK: - View Lifecycle
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.whiteColor()
         
         emailTextField = UITextField()
         emailTextField?.borderStyle = .RoundedRect
@@ -43,43 +50,72 @@ class LoginViewController: UIViewController {
         passwordTextField?.secureTextEntry = true
         passwordTextField?.returnKeyType = .Send
         
-        if let emailTextField = emailTextField, passwordTextField = passwordTextField {
+        spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        spinner?.hidesWhenStopped = true
+        
+        sendButton = UIButton(type: .System)
+        sendButton?.titleLabel?.font = UIFont(name: "Helvetica", size: 16.0)
+        sendButton?.setTitle("Send", forState: .Normal)
+        sendButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        sendButton?.setTitleColor(UIColor(white: 0, alpha: 0.2), forState: .Disabled)
+        
+        if let emailTextField = emailTextField,
+            passwordTextField = passwordTextField,
+            sendButton = sendButton,
+            spinner = spinner {
             
-            self.view.addSubview(emailTextField)
-            self.view.addSubview(passwordTextField)
+            view.addSubview(emailTextField)
+            view.addSubview(passwordTextField)
+            view.addSubview(spinner)
+            view.addSubview(sendButton)
             
-            emailTextField.snp_makeConstraints { make in
-                make.top.equalTo(self.view).offset(160)
-                make.centerX.equalTo(self.view)
-                make.width.equalTo(self.view).inset(40)
-                make.height.equalTo(50)
+            // constraints
+            emailTextField.snp_makeConstraints {
+                $0.top.equalTo(view).offset(160)
+                $0.centerX.equalTo(view)
+                $0.width.equalTo(view).inset(40)
+                $0.height.equalTo(50)
             }
-            passwordTextField.snp_makeConstraints { make in
-                make.top.equalTo(emailTextField.snp_bottom).offset(20)
-                make.size.equalTo(emailTextField)
-                make.centerX.equalTo(emailTextField)
+            
+            passwordTextField.snp_makeConstraints {
+                $0.top.equalTo(emailTextField.snp_bottom).offset(20)
+                $0.size.equalTo(emailTextField)
+                $0.centerX.equalTo(emailTextField)
             }
+            
+            spinner.snp_makeConstraints {
+                $0.top.equalTo(passwordTextField.snp_bottom).offset(20)
+                $0.centerX.equalTo(view)
+                $0.size.equalTo(CGSizeMake(20, 20))
+            }
+            
+            sendButton.snp_makeConstraints {
+                $0.top.equalTo(spinner.snp_bottom)
+                $0.size.equalTo(passwordTextField)
+                $0.centerX.equalTo(passwordTextField)
+            }
+        
+            // rx
+            viewModel = LoginViewModel(email: emailTextField.rx_text.asDriver(),
+                                       password: passwordTextField.rx_text.asDriver(),
+                                       spinnerAnimating: spinner.rx_animating,
+                                       sendButtonTap: sendButton.rx_tap.asDriver(),
+                                       sendButtonEnabled: sendButton.rx_enabled)
+            
+            viewModel.loginOA.subscribeNext { n in
+                if let n = n {
+                    print("login succeed")
+                    print("jwt \(n.0)")
+                    print("user \(n.1)")
+                } else {
+                    print("login failed")
+                }
+            }.addDisposableTo(viewModel.disposeBag)
         }
-        
-        emailTextField?.rx_controlEvent(.EditingDidEndOnExit).takeUntil(self.rx_deallocated).subscribe{
-            [weak self] event in
-            guard let strongSelf = self else { return }
-            strongSelf.passwordTextField?.becomeFirstResponder()
-        }.addDisposableTo(self.disposeBag)
-        
-        passwordTextField?.rx_controlEvent(.EditingDidEndOnExit).takeUntil(self.rx_deallocated).subscribe{
-            [weak self] event in
-            guard let strongSelf = self else { return }
-            strongSelf.passwordTextField?.resignFirstResponder()
-            print("sending!!!")
-        }.addDisposableTo(self.disposeBag)
-
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-
 }
 
