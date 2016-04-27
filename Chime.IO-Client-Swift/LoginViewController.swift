@@ -14,12 +14,11 @@ import SnapKit
 
 class LoginViewController: UIViewController {
     
-    var emailTextField: UITextField?
-    var passwordTextField: UITextField?
-    var sendButton: UIButton?
-    var spinner: UIActivityIndicatorView?
+    var emailTextField: UITextField!
+    var passwordTextField: UITextField!
+    var sendButton: UIButton!
+    var spinner: UIActivityIndicatorView!
     
-    lazy var disposeBag = DisposeBag()
     var viewModel: LoginViewModel!
     
     init() {
@@ -35,83 +34,84 @@ class LoginViewController: UIViewController {
         view.backgroundColor = UIColor.whiteColor()
         
         emailTextField = UITextField()
-        emailTextField?.borderStyle = .RoundedRect
-        emailTextField?.textColor = UIColor.blackColor()
-        emailTextField?.placeholder = "email"
-        emailTextField?.autocapitalizationType = .None
-        emailTextField?.autocorrectionType = .No
-        emailTextField?.keyboardType = .EmailAddress
-        emailTextField?.returnKeyType = .Next
+        emailTextField.borderStyle = .RoundedRect
+        emailTextField.textColor = UIColor.blackColor()
+        emailTextField.placeholder = "email"
+        emailTextField.autocapitalizationType = .None
+        emailTextField.autocorrectionType = .No
+        emailTextField.keyboardType = .EmailAddress
+        emailTextField.returnKeyType = .Next
         
         passwordTextField = UITextField()
-        passwordTextField?.borderStyle = .RoundedRect
-        passwordTextField?.textColor = UIColor.blackColor()
-        passwordTextField?.placeholder = "password"
-        passwordTextField?.secureTextEntry = true
-        passwordTextField?.returnKeyType = .Send
+        passwordTextField.borderStyle = .RoundedRect
+        passwordTextField.textColor = UIColor.blackColor()
+        passwordTextField.placeholder = "password"
+        passwordTextField.secureTextEntry = true
+        passwordTextField.returnKeyType = .Send
         
         spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-        spinner?.hidesWhenStopped = true
+        spinner.hidesWhenStopped = true
         
         sendButton = UIButton(type: .System)
-        sendButton?.titleLabel?.font = UIFont(name: "Helvetica", size: 16.0)
-        sendButton?.setTitle("Send", forState: .Normal)
-        sendButton?.setTitleColor(UIColor.blackColor(), forState: .Normal)
-        sendButton?.setTitleColor(UIColor(white: 0, alpha: 0.2), forState: .Disabled)
+        sendButton.titleLabel?.font = UIFont(name: "Helvetica", size: 16.0)
+        sendButton.setTitle("Send", forState: .Normal)
+        sendButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        sendButton.setTitleColor(UIColor(white: 0, alpha: 0.2), forState: .Disabled)
         
-        if let emailTextField = emailTextField,
-            passwordTextField = passwordTextField,
-            sendButton = sendButton,
-            spinner = spinner {
-            
-            view.addSubview(emailTextField)
-            view.addSubview(passwordTextField)
-            view.addSubview(spinner)
-            view.addSubview(sendButton)
-            
-            // constraints
-            emailTextField.snp_makeConstraints {
-                $0.top.equalTo(view).offset(160)
-                $0.centerX.equalTo(view)
-                $0.width.equalTo(view).inset(40)
-                $0.height.equalTo(50)
-            }
-            
-            passwordTextField.snp_makeConstraints {
-                $0.top.equalTo(emailTextField.snp_bottom).offset(20)
-                $0.size.equalTo(emailTextField)
-                $0.centerX.equalTo(emailTextField)
-            }
-            
-            spinner.snp_makeConstraints {
-                $0.top.equalTo(passwordTextField.snp_bottom).offset(20)
-                $0.centerX.equalTo(view)
-                $0.size.equalTo(CGSizeMake(20, 20))
-            }
-            
-            sendButton.snp_makeConstraints {
-                $0.top.equalTo(spinner.snp_bottom)
-                $0.size.equalTo(passwordTextField)
-                $0.centerX.equalTo(passwordTextField)
-            }
+        view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
+        view.addSubview(spinner)
+        view.addSubview(sendButton)
         
-            // rx
-            viewModel = LoginViewModel(email: emailTextField.rx_text.asDriver(),
-                                       password: passwordTextField.rx_text.asDriver(),
-                                       spinnerAnimating: spinner.rx_animating,
-                                       sendButtonTap: sendButton.rx_tap.asDriver(),
-                                       sendButtonEnabled: sendButton.rx_enabled)
-            
-            viewModel.loginOA.subscribeNext { n in
-                if let n = n {
-                    print("login succeed")
-                    print("jwt \(n.0)")
-                    print("user \(n.1)")
-                } else {
-                    print("login failed")
-                }
-            }.addDisposableTo(viewModel.disposeBag)
+        // constraints
+        emailTextField.snp_makeConstraints {
+            $0.top.equalTo(view).offset(160)
+            $0.centerX.equalTo(view)
+            $0.width.equalTo(view).inset(40)
+            $0.height.equalTo(50)
         }
+        
+        passwordTextField.snp_makeConstraints {
+            $0.top.equalTo(emailTextField.snp_bottom).offset(20)
+            $0.size.equalTo(emailTextField)
+            $0.centerX.equalTo(emailTextField)
+        }
+        
+        spinner.snp_makeConstraints {
+            $0.top.equalTo(passwordTextField.snp_bottom).offset(20)
+            $0.centerX.equalTo(view)
+            $0.size.equalTo(CGSizeMake(20, 20))
+        }
+        
+        sendButton.snp_makeConstraints {
+            $0.top.equalTo(spinner.snp_bottom)
+            $0.size.equalTo(passwordTextField)
+            $0.centerX.equalTo(passwordTextField)
+        }
+        
+        // rx
+        viewModel = LoginViewModel(email: emailTextField.rx_text.asDriver(),
+                                   password: passwordTextField.rx_text.asDriver(),
+                                   spinnerAnimating: spinner.rx_animating,
+                                   sendButtonTap: sendButton.rx_tap.asDriver(),
+                                   sendButtonEnabled: sendButton.rx_enabled)
+        
+        viewModel.loginOA.subscribeNext { n in
+            if let n = n {
+                print("login succeed")
+                print("jwt \(n.0)")
+                print("user \(n.1)")
+            } else {
+                print("login failed")
+            }
+        }.addDisposableTo(viewModel.disposeBag)
+        
+        viewModel.loginOA.subscribeCompleted {
+            print("go to next page")
+            dispatch_async(dispatch_get_main_queue()) {
+                self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+            }
+        }.addDisposableTo(viewModel.disposeBag)
     }
     
     override func didReceiveMemoryWarning() {
