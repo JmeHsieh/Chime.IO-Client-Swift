@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9840452D1CD0621700179DA3 /* RoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9840452C1CD0621700179DA3 /* RoomsViewController.swift */; };
+		9840452F1CD0725D00179DA3 /* RoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9840452E1CD0725D00179DA3 /* RoomsViewModel.swift */; };
 		985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */; };
 		985C5C741CC4954E00D2BFE8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */; };
 		985C5C771CC4954E00D2BFE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C751CC4954E00D2BFE8 /* Main.storyboard */; };
@@ -74,6 +76,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9840452C1CD0621700179DA3 /* RoomsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsViewController.swift; sourceTree = "<group>"; };
+		9840452E1CD0725D00179DA3 /* RoomsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsViewModel.swift; sourceTree = "<group>"; };
 		985C5C6E1CC4954E00D2BFE8 /* Chime.IO-Client-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chime.IO-Client-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -157,6 +161,8 @@
 				985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */,
 				98CF32321CCA5E50009EFB3B /* LoginViewModel.swift */,
 				985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */,
+				9840452E1CD0725D00179DA3 /* RoomsViewModel.swift */,
+				9840452C1CD0621700179DA3 /* RoomsViewController.swift */,
 				985C5C911CC497CB00D2BFE8 /* ChimeIO */,
 				985C5C751CC4954E00D2BFE8 /* Main.storyboard */,
 				985C5C781CC4954E00D2BFE8 /* Assets.xcassets */,
@@ -334,6 +340,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9840452F1CD0725D00179DA3 /* RoomsViewModel.swift in Sources */,
 				98EFF65A1CC6191500C4C5D3 /* User.swift in Sources */,
 				985C5C741CC4954E00D2BFE8 /* LoginViewController.swift in Sources */,
 				98EFF6641CC63D5900C4C5D3 /* Room.swift in Sources */,
@@ -341,6 +348,7 @@
 				98CF32331CCA5E50009EFB3B /* LoginViewModel.swift in Sources */,
 				985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
 				985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */,
+				9840452D1CD0621700179DA3 /* RoomsViewController.swift in Sources */,
 				98B12B4A1CC791260016F1E5 /* Message.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
