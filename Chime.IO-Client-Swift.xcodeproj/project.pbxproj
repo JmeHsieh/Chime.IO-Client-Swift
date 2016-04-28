@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9840452D1CD0621700179DA3 /* RoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9840452C1CD0621700179DA3 /* RoomsViewController.swift */; };
 		9840452F1CD0725D00179DA3 /* RoomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9840452E1CD0725D00179DA3 /* RoomsViewModel.swift */; };
+		984045351CD1EB1700179DA3 /* SharingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 984045341CD1EB1700179DA3 /* SharingManager.swift */; };
 		985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */; };
 		985C5C741CC4954E00D2BFE8 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */; };
 		985C5C771CC4954E00D2BFE8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C751CC4954E00D2BFE8 /* Main.storyboard */; };
@@ -78,6 +79,7 @@
 /* Begin PBXFileReference section */
 		9840452C1CD0621700179DA3 /* RoomsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsViewController.swift; sourceTree = "<group>"; };
 		9840452E1CD0725D00179DA3 /* RoomsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomsViewModel.swift; sourceTree = "<group>"; };
+		984045341CD1EB1700179DA3 /* SharingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingManager.swift; sourceTree = "<group>"; };
 		985C5C6E1CC4954E00D2BFE8 /* Chime.IO-Client-Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chime.IO-Client-Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		985C5C701CC4954E00D2BFE8 /* Chime.IO-Client-Swift */ = {
 			isa = PBXGroup;
 			children = (
+				984045341CD1EB1700179DA3 /* SharingManager.swift */,
 				985C5C711CC4954E00D2BFE8 /* AppDelegate.swift */,
 				98CF32321CCA5E50009EFB3B /* LoginViewModel.swift */,
 				985C5C731CC4954E00D2BFE8 /* LoginViewController.swift */,
@@ -350,6 +353,7 @@
 				985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */,
 				9840452D1CD0621700179DA3 /* RoomsViewController.swift in Sources */,
 				98B12B4A1CC791260016F1E5 /* Message.swift in Sources */,
+				984045351CD1EB1700179DA3 /* SharingManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
