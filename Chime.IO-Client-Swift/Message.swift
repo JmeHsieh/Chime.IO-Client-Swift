@@ -24,13 +24,17 @@ class Message: Mappable {
     
     var id: String
     var text: String
+    var senderID: String
+    var roomID: String
     var messageType: MessageType = .Text
     var createdAt: NSDate?
     var updatedAt: NSDate?
     
-    init(id: String, text: String, messageType: MessageType, createdAt: NSDate?, updatedAt: NSDate?) {
+    init(id: String, text: String, senderID: String, roomID: String, messageType: MessageType, createdAt: NSDate?, updatedAt: NSDate?) {
         self.id = id
         self.text = text
+        self.senderID = senderID
+        self.roomID = roomID
         self.messageType = messageType
         self.createdAt = createdAt
         self.updatedAt = updatedAt
@@ -42,11 +46,15 @@ class Message: Mappable {
     required init?(_ map: Map) {
         id = ""
         text = ""
+        senderID = ""
+        roomID = ""
     }
     
     func mapping(map: Map) {
         id          <- map["_id"]
         text        <- map["text"]
+        senderID    <- map["user"]
+        roomID      <- map["room"]
         messageType <- map["messageType"]
         createdAt   <- (map["createdAt"], DateFormatterTransform(dateFormatter: Utility.dateFormatter))
         updatedAt   <- (map["updatedAt"], DateFormatterTransform(dateFormatter: Utility.dateFormatter))
