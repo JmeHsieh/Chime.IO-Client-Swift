@@ -9,25 +9,64 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import UIKit
 
 class ChatViewModel {
     
-    private let isloadingV = Variable<Bool>(false)
+    var roomID: String!
     lazy var disposeBag = DisposeBag()
     
-    var isloadingD: Driver<Bool>
-    var messagesOA: Observable<[Message]>!
+    var messagesD: Driver<[Message]>!
+    private let messagesV = Variable<[Message]>([])
     
-    init(roomID: String) {
-        isloadingD = isloadingV.asDriver()
-        messagesOA = Observable.create { o in
-            ChimeIOAPI.sharedInstance.getMessages(roomID).then { [unowned self] ms -> Void in
-                self.isloadingV.value = false
-                o.onNext(ms)
-            }
-            return NopDisposable.instance
-        }.shareReplayLatestWhileConnected()
+    var isreloadingD: Driver<Bool>
+    private let isreloadingV = Variable<Bool>(false)
+    
+    var ispostingD: Driver<Bool>
+    private let ispostingV = Variable<Bool>(false)
+    
+    
+    init(roomID: String, inputField: UITextField) {
+        messagesD = messagesV.asDriver()
+        isreloadingD = isreloadingV.asDriver()
+        ispostingD = ispostingV.asDriver()
+        self.roomID = roomID
+            
+        let inputFieldTextD = inputField.rx_text.asDriver()
+        let inputFieldReturnD = inputField.rx_controlEvent(.EditingDidEndOnExit).asDriver()
         
+        // bind inputField's return key event to api-calling
+        inputFieldReturnD.withLatestFrom(ispostingD)
+            .filter { !$0 }
+            .withLatestFrom(inputFieldTextD)
+            .driveNext { [unowned self] in
+                self.ispostingV.value = true
+                ChimeIOAPI.sharedInstance.postMessage($0, inRoomID: roomID).then { m  -> Void in
+                    self.ispostingV.value = false
+                    var ms = self.messagesV.value
+                    let foundIndex = ms.indexOf { return $0.id == m.id }
+                    if foundIndex == nil {
+                        ms.append(m)
+                        ms.sortInPlace {
+                            return $1.createdAt!.compare($0.createdAt!) == .OrderedDescending
+                        }
+                    }
+                    self.messagesV.value = ms
+                    inputField.text = nil
+                }.error { _ in
+                    self.ispostingV.value = false
+                }
+        }.addDisposableTo(disposeBag)
+    }
+    
+    func reloadMessages() {
+        self.isreloadingV.value = true
+        ChimeIOAPI.sharedInstance.getMessages(roomID).then { ms -> Void in
+            self.isreloadingV.value = false
+            self.messagesV.value = ms
+        }.error { _ in
+            self.isreloadingV.value = false
+        }
     }
 }
 
