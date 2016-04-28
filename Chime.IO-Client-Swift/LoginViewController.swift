@@ -96,11 +96,12 @@ class LoginViewController: UIViewController {
                                    sendButtonTap: sendButton.rx_tap.asDriver(),
                                    sendButtonEnabled: sendButton.rx_enabled)
         
-        viewModel.loginOA.subscribeNext { n in
-            if let n = n {
+        viewModel.loginOA.subscribeNext {
+            if let userinfo = $0 {
                 print("login succeed")
-                print("jwt \(n.0)")
-                print("user \(n.1)")
+                print("jwt \(userinfo.0)")
+                print("user \(userinfo.1)")
+                SharingManager.defaultManager.currentUserInfo = userinfo
             } else {
                 print("login failed")
             }
