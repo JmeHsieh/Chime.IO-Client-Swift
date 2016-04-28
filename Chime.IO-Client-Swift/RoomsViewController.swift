@@ -30,6 +30,7 @@ class RoomsViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CellIdentifier")
+        tableView.rowHeight = 88.0
         
         refreshButton = UIBarButtonItem()
         refreshButton.title = "Refresh"
@@ -45,10 +46,12 @@ class RoomsViewController: UITableViewController {
         
         viewModel.roomsOA.bindTo(tableView.rx_itemsWithCellIdentifier("CellIdentifier")) { (row, room, cell) in
             cell.textLabel?.text = room.id
+            cell.accessoryType = .DisclosureIndicator
         }.addDisposableTo(viewModel.disposeBag)
         
         tableView.rx_modelSelected(Room).subscribeNext { [unowned self] in
             print("room: \($0.id) tapped")
+            self.navigationController?.pushViewController(ChatViewController(roomID: $0.id), animated: true)
         }.addDisposableTo(viewModel.disposeBag)
         
         tableView.rx_itemSelected.subscribeNext { [unowned self] in
@@ -59,62 +62,4 @@ class RoomsViewController: UITableViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-
-//    var _rooms = [Room]()
-//    var rooms: [Room] {
-//        get { return _rooms }
-//        set(nrs) {
-//            var rs = nrs
-//            rs.sortInPlace {
-//                $0.createdAt!.compare($1.createdAt!) == NSComparisonResult.OrderedAscending
-//            }
-//            _rooms = rs
-//        }
-//    }
-//
-//
-//    // MARK: - View Lifecycle
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        
-//        self
-//        ChimeIOAPI.sharedInstance.getMyRooms().then(on: dispatch_get_main_queue()) { rooms -> Void in
-//            self.rooms = rooms
-//            self.tableView.reloadData()
-//        }
-//    }
-//    
-//    override func didReceiveMemoryWarning() {
-//        
-//    }
-//    
-//    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-//        return 1
-//    }
-//    
-//    // MARK: - UITableViewDataSource
-//    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return rooms.count
-//    }
-//    
-//    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-//        let CellIdentifier = "CellIdentifier"
-//        var cell = tableView.dequeueReusableCellWithIdentifier(CellIdentifier)
-//        if cell == nil {
-//            cell = UITableViewCell(style: .Subtitle, reuseIdentifier: CellIdentifier)
-//            cell?.accessoryType = .DisclosureIndicator
-//        }
-//        cell?.textLabel!.text = rooms[indexPath.row].id
-//        return cell!
-//    }
-//    
-//    // MARK: - UITableViewDelegate
-//    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        return 80.0
-//    }
-//    
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-//    }
 }
