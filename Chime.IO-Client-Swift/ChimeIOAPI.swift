@@ -29,6 +29,10 @@ enum ChimeIOAPIError: ErrorType {
     case OtherError(String)
 }
 
+enum ChimeIONotifications: String {
+    case NewMessage = "messages created"
+}
+
 
 class ChimeIOAPI {
     
@@ -68,6 +72,15 @@ class ChimeIOAPI {
         
         socket.onAny { event in
             print(event)
+            if event.event == ChimeIONotifications.NewMessage.rawValue {
+                if let message = event.items?.firstObject {
+                    if let m = self.messageMapper.map(message) {
+                        NSNotificationCenter.defaultCenter().postNotificationName(ChimeIONotifications.NewMessage.rawValue,
+                            object: self,
+                            userInfo: ["message": m])
+                    }
+                }
+            }
         }
         socket.on(SocketEvent.Connect.rawValue) { result, ack in
             print("default event handler: connect")
