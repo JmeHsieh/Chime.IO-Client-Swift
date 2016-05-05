@@ -74,7 +74,7 @@ class ChatViewController: UIViewController {
                 cell.textLabel?.text = message.text
             } else {
                 cell.textLabel?.textAlignment = .Left
-                cell.textLabel?.text = "\(message.senderID): \(message.text)"
+                cell.textLabel?.text = "\(message.senderID.substringFromIndex(message.senderID.endIndex.advancedBy(-4)))>>  \(message.text)"
             }
         }.addDisposableTo(viewModel.disposeBag)
         
