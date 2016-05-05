@@ -26,6 +26,11 @@ enum SocketEvent: String {
 enum ChimeIOAPIError: ErrorType {
     case GuardError(String)
     case JSONError(String)
+    case OtherError(String)
+}
+
+enum ChimeIONotifications: String {
+    case NewMessage = "messages created"
 }
 
 
@@ -67,6 +72,15 @@ class ChimeIOAPI {
         
         socket.onAny { event in
             print(event)
+            if event.event == ChimeIONotifications.NewMessage.rawValue {
+                if let message = event.items?.firstObject {
+                    if let m = self.messageMapper.map(message) {
+                        NSNotificationCenter.defaultCenter().postNotificationName(ChimeIONotifications.NewMessage.rawValue,
+                            object: self,
+                            userInfo: ["message": m])
+                    }
+                }
+            }
         }
         socket.on(SocketEvent.Connect.rawValue) { result, ack in
             print("default event handler: connect")
@@ -88,7 +102,7 @@ class ChimeIOAPI {
             print("authenticated")
         }
         socket.on(SocketEvent.Unauthorized.rawValue) { result, ack in
-            print("unauthenticated")
+            print("unauthorized")
         }
     }
     
@@ -146,6 +160,9 @@ class ChimeIOAPI {
                     reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
+            socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
+                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
+            }
             
             let params = ["type": "local", "email": email, "password": password]
             socket.emit(SocketEvent.Authenticate.rawValue, params)
@@ -162,6 +179,9 @@ class ChimeIOAPI {
                 } else {
                     reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
+            }
+            socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
+                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
             }
             
             let params = ["token": jwt]
