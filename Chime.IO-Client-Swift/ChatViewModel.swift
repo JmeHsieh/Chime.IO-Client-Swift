@@ -57,6 +57,17 @@ class ChatViewModel {
                     self.ispostingV.value = false
                 }
         }.addDisposableTo(disposeBag)
+        
+        NSNotificationCenter.defaultCenter().rx_notification(ChimeIONotifications.NewMessage.rawValue).subscribeNext { n in
+            if let userInfo = n.userInfo where userInfo["message"] != nil {
+                var ms = self.messagesV.value
+                ms.append(userInfo["message"] as! Message)
+                ms.sortInPlace {
+                    return $1.createdAt!.compare($0.createdAt!) == .OrderedDescending
+                }
+                self.messagesV.value = ms
+            }
+        }.addDisposableTo(disposeBag)
     }
     
     func reloadMessages() {
