@@ -145,7 +145,7 @@ class ChimeIOAPI {
     
     func signup(username: String, _ email: String, _ password: String) -> Promise<(String, User)> {
         return self._signup(username, email, password).then { user in
-            return self.login(username, password)
+            return self.login(email, password)
         }
     }
     
