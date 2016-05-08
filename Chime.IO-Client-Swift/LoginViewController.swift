@@ -14,12 +14,21 @@ import SnapKit
 
 class LoginViewController: UIViewController {
     
+    // ui
     var emailTextField: UITextField!
     var passwordTextField: UITextField!
-    var sendButton: UIButton!
     var spinner: UIActivityIndicatorView!
+    var sendButton: UIButton!
+    var signAlert: UIAlertController!
     
+    // rx
+    private let disposeBag = DisposeBag()
+    private let sendV = Variable<String>("")
+    var sendD: Driver<String>?
     var viewModel: LoginViewModel!
+    
+    
+    // MARK: - Constructros
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -29,10 +38,14 @@ class LoginViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.whiteColor()
         
+        // setup views
         emailTextField = UITextField()
         emailTextField.borderStyle = .RoundedRect
         emailTextField.textColor = UIColor.blackColor()
@@ -47,7 +60,7 @@ class LoginViewController: UIViewController {
         passwordTextField.textColor = UIColor.blackColor()
         passwordTextField.placeholder = "password"
         passwordTextField.secureTextEntry = true
-        passwordTextField.returnKeyType = .Send
+        passwordTextField.returnKeyType = .Done
         
         spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
         spinner.hidesWhenStopped = true
@@ -58,12 +71,16 @@ class LoginViewController: UIViewController {
         sendButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         sendButton.setTitleColor(UIColor(white: 0, alpha: 0.2), forState: .Disabled)
         
+        signAlert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        signAlert.addAction(UIAlertAction(title: "Login", style: .Default) { [unowned self] in self.sendV.value = $0.title! })
+        signAlert.addAction(UIAlertAction(title: "Signup", style: .Default) { [unowned self] in self.sendV.value = $0.title! })
+        signAlert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
         view.addSubview(emailTextField)
         view.addSubview(passwordTextField)
         view.addSubview(spinner)
         view.addSubview(sendButton)
         
-        // constraints
         emailTextField.snp_makeConstraints {
             $0.top.equalTo(view).offset(160)
             $0.centerX.equalTo(view)
@@ -89,11 +106,30 @@ class LoginViewController: UIViewController {
             $0.centerX.equalTo(passwordTextField)
         }
         
+        
         // rx
+        emailTextField.rx_controlEvent(.EditingDidEndOnExit)
+            .asDriver()
+            .driveNext { [unowned self] _ in
+                self.passwordTextField.becomeFirstResponder()
+            }.addDisposableTo(disposeBag)
+        
+        passwordTextField.rx_controlEvent(.EditingDidEnd)
+            .asDriver()
+            .driveNext { [unowned self] _ in
+            self.passwordTextField.resignFirstResponder()
+        }.addDisposableTo(disposeBag)
+        
+        sendButton.rx_tap.asDriver().driveNext { [unowned self] _ in
+            self.presentViewController(self.signAlert, animated: true, completion: nil)
+        }.addDisposableTo(disposeBag)
+        
+        sendD = sendV.asDriver()
+        
         viewModel = LoginViewModel(email: emailTextField.rx_text.asDriver(),
                                    password: passwordTextField.rx_text.asDriver(),
                                    spinnerAnimating: spinner.rx_animating,
-                                   sendButtonTap: sendButton.rx_tap.asDriver(),
+                                   send: sendD!,
                                    sendButtonEnabled: sendButton.rx_enabled)
         
         viewModel.loginOA.subscribeNext {
@@ -105,14 +141,34 @@ class LoginViewController: UIViewController {
             } else {
                 print("login failed")
             }
-        }.addDisposableTo(viewModel.disposeBag)
+        }.addDisposableTo(disposeBag)
         
         viewModel.loginOA.subscribeCompleted {
             print("go to next page")
             dispatch_async(dispatch_get_main_queue()) {
+                print(self.navigationController)
                 self.navigationController?.pushViewController(RoomsViewController(), animated: true)
             }
-        }.addDisposableTo(viewModel.disposeBag)
+        }.addDisposableTo(disposeBag)
+        
+        viewModel.signupOA.subscribeNext {
+            if let userinfo = $0 {
+                print("signup succeed")
+                print("jwt \(userinfo.0)")
+                print("user \(userinfo.1)")
+                SharingManager.defaultManager.currentUserInfo = userinfo
+            } else {
+                print("signup failed")
+            }
+        }.addDisposableTo(disposeBag)
+        
+        viewModel.signupOA.subscribeCompleted {
+            print("go to next page")
+            dispatch_async(dispatch_get_main_queue()) {
+                print(self.navigationController)
+                self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+            }
+        }.addDisposableTo(disposeBag)
     }
     
     override func didReceiveMemoryWarning() {
