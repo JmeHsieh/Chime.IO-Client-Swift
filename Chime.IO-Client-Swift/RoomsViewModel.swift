@@ -12,18 +12,22 @@ import RxCocoa
 
 class RoomsViewModel {
     
+    private let reloadP = PublishSubject<Void>()
     private let isloadingV = Variable<Bool>(false)
-    lazy var disposeBag = DisposeBag()
-    
     var isloadingD: Driver<Bool>
     var roomsOA: Observable<[Room]>!
     
+    // MARK: - Constructors
     init(_ refreshD: Driver<Void>) {
         isloadingD = isloadingV.asDriver()
         roomsOA = Observable.create { [unowned self] o in
-            return refreshD.withLatestFrom(self.isloadingD)
+            return [refreshD.asObservable(), self.reloadP.asObservable()]
+                .toObservable()
+                .merge()
+                .withLatestFrom(self.isloadingD)
                 .filter { !$0 }
-                .driveNext { l in
+                .subscribeOn(MainScheduler.instance)
+                .subscribeNext { l in
                     self.isloadingV.value = true
                     ChimeIOAPI.sharedInstance.getMyRooms().then { rms -> Void in
                         self.isloadingV.value = false
@@ -31,5 +35,10 @@ class RoomsViewModel {
                     }
             }
         }.shareReplayLatestWhileConnected()
+    }
+    
+    // MARK: - Instance Methods
+    func reload() {
+        reloadP.onNext()
     }
 }
