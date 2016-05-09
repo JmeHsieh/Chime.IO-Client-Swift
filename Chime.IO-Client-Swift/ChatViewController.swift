@@ -50,7 +50,10 @@ class ChatViewController: UIViewController {
         inputField.returnKeyType = .Send
         inputField.font = UIFont(name: "Helvetica", size: 14.0)
         inputField.textColor = UIColor.darkGrayColor()
-        inputField.borderStyle = .RoundedRect
+        inputField.backgroundColor = UIColor.whiteColor()
+        inputField.borderStyle = .None
+        inputField.layer.borderWidth = 0.5
+        inputField.layer.borderColor = UIColor.lightGrayColor().CGColor
         
         view.addSubview(tableView)
         view.addSubview(inputField)
