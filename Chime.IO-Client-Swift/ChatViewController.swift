@@ -9,14 +9,19 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import SnapKit
 import UIKit
 
 class ChatViewController: UIViewController {
     
+    
+    var roomID: String!
+    let CellIdentifier = "CellIdentifier"
     var tableView: UITableView!
     var inputField: UITextField!
-    let CellIdentifier = "CellIdentifier"
-    var roomID: String!
+    var inputFieldBottomConstraint: Constraint?
+    
+    private let disposeBag = DisposeBag()
     var viewModel: ChatViewModel!
 
     // MARK: - Constructors
@@ -34,6 +39,7 @@ class ChatViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = "Chat"
         
+        // setup views
         tableView = UITableView(frame: view.bounds, style: .Plain)
         tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.allowsSelection = false
@@ -55,14 +61,69 @@ class ChatViewController: UIViewController {
             $0.centerX.equalTo(view)
             $0.width.equalTo(view)
         }
-        inputField.snp_makeConstraints {
-            $0.centerX.equalTo(view)
-            $0.bottom.equalTo(view)
-            $0.width.equalTo(view)
+        
+        inputField.snp_makeConstraints { [unowned self] in
+            $0.centerX.equalTo(self.view)
+            self.inputFieldBottomConstraint = $0.bottom.equalTo(self.view).constraint
+            $0.width.equalTo(self.view)
             $0.height.equalTo(50.0)
         }
         
+        // keyboard notification handler
+        NSNotificationCenter.defaultCenter()
+            .rx_notification(UIKeyboardWillShowNotification)
+            .observeOn(MainScheduler.instance)
+            .subscribeNext {
+                if let  u = $0.userInfo,
+                    f = u[UIKeyboardFrameEndUserInfoKey] as? NSValue,
+                    d = u[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue,
+                    c = u[UIKeyboardAnimationCurveUserInfoKey]?.unsignedLongValue {
+                    let kbHeight = f.CGRectValue().size.height
+                    let duration = NSTimeInterval(d)
+                    let opts = UIViewAnimationOptions(rawValue: c)
+                    UIView.animateWithDuration(
+                        duration,
+                        delay: 0,
+                        options: opts,
+                        animations: {
+                            self.inputFieldBottomConstraint?.updateOffset(-kbHeight)
+                            self.view.layoutIfNeeded()
+                        },
+                        completion: { _ in
+                            let tbHeight = self.tableView.bounds.size.height
+                            let ctHeight = self.tableView.contentSize.height
+                            let maxOffset = CGPointMake(
+                                self.tableView.contentOffset.x,
+                                max(ctHeight-tbHeight, tbHeight))
+                            self.tableView.setContentOffset(maxOffset, animated: true)
+                    })
+                }
+        }.addDisposableTo(disposeBag)
+        
+        NSNotificationCenter.defaultCenter()
+            .rx_notification(UIKeyboardWillHideNotification)
+            .observeOn(MainScheduler.instance)
+            .subscribeNext {
+            if let  u = $0.userInfo,
+                d = u[UIKeyboardAnimationDurationUserInfoKey]?.doubleValue,
+                c = u[UIKeyboardAnimationCurveUserInfoKey]?.unsignedLongValue {
+                let duration = NSTimeInterval(d)
+                let opts = UIViewAnimationOptions(rawValue: c)
+                UIView.animateWithDuration(
+                    duration,
+                    delay: 0,
+                    options: opts,
+                    animations: {
+                        self.inputFieldBottomConstraint?.updateOffset(0)
+                        self.view.layoutIfNeeded()
+                    },
+                    completion: nil)
+                }
+        }.addDisposableTo(disposeBag)
+        
+        // rx view model
         viewModel = ChatViewModel(roomID: roomID, inputField: inputField)
+        
         viewModel.messagesD
             .asObservable()
             .bindTo(tableView.rx_itemsWithCellIdentifier(CellIdentifier, cellType: UITableViewCell.self)) {
