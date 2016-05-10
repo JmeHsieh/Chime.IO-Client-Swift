@@ -93,11 +93,9 @@ class ChatViewController: UIViewController {
                             self.view.layoutIfNeeded()
                         },
                         completion: { _ in
-                            let tbHeight = self.tableView.bounds.size.height
-                            let ctHeight = self.tableView.contentSize.height
                             let maxOffset = CGPointMake(
                                 self.tableView.contentOffset.x,
-                                max(ctHeight-tbHeight, tbHeight))
+                                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0))
                             self.tableView.setContentOffset(maxOffset, animated: true)
                     })
                 }
@@ -143,8 +141,8 @@ class ChatViewController: UIViewController {
         }.addDisposableTo(viewModel.disposeBag)
         
         viewModel.messagesD.driveNext { [unowned self] _ in
-            let offset = CGPointMake(0, self.tableView.contentSize.height-CGRectGetHeight(self.tableView.bounds))
-            self.tableView.setContentOffset(offset, animated: true)
+            let maxOffset = CGPointMake(0, max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0))
+            self.tableView.setContentOffset(maxOffset, animated: true)
         }.addDisposableTo(viewModel.disposeBag)
         
         viewModel.reloadMessages()
