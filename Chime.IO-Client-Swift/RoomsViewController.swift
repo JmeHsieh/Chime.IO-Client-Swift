@@ -50,7 +50,8 @@ class RoomsViewController: UITableViewController {
         }.addDisposableTo(disposeBag)
         
         viewModel.roomsOA.bindTo(tableView.rx_itemsWithCellIdentifier("CellIdentifier")) { (row, room, cell) in
-            cell.textLabel?.text = room.id
+            let memberNames = room.members.map { $0.username }.joinWithSeparator(", ")
+            cell.textLabel?.text = memberNames
             cell.accessoryType = .DisclosureIndicator
         }.addDisposableTo(disposeBag)
         

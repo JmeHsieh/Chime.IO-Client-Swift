@@ -13,15 +13,15 @@ import SwiftyJSON
 class Room: Mappable {
     
     var id: String
-    var memberIDs: [String]
+    var members: [User]
     var archivedIDs: [String]
     var isPublic: Bool = false
     var createdAt: NSDate?
     var updatedAt: NSDate?
     
-    init(id: String, memberIDs: [String], archivedIDs: [String], isPublic: Bool, createdAt: NSDate?, updatedAt: NSDate?) {
+    init(id: String, members: [User], archivedIDs: [String], isPublic: Bool, createdAt: NSDate?, updatedAt: NSDate?) {
         self.id = id
-        self.memberIDs = memberIDs
+        self.members = members
         self.archivedIDs = archivedIDs
         self.isPublic = isPublic
         self.createdAt = createdAt
@@ -33,13 +33,13 @@ class Room: Mappable {
     
     required init?(_ map: Map) {
         id = ""
-        memberIDs = []
+        members = []
         archivedIDs = []
     }
     
     func mapping(map: Map) {
         id          <- map["_id"]
-        memberIDs   <- map["users"]
+        members     <- map["users"]
         archivedIDs <- map["archivedBy"]
         isPublic    <- map["isPublic"]
         createdAt   <- (map["createdAt"], DateFormatterTransform(dateFormatter: Utility.dateFormatter))
