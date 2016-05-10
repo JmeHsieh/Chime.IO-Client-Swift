@@ -48,6 +48,8 @@ class ChatViewController: UIViewController {
         
         inputField = UITextField()
         inputField.returnKeyType = .Send
+        inputField.leftViewMode = .Always
+        inputField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: 10))
         inputField.font = UIFont(name: "Helvetica", size: 14.0)
         inputField.textColor = UIColor.darkGrayColor()
         inputField.backgroundColor = UIColor.whiteColor()
