@@ -17,9 +17,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         ChimeIOAPI.sharedInstance.connect().then { return }
         
-        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        self.window?.rootViewController = LoginViewController()
-        self.window?.makeKeyAndVisible()
+        window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+        window?.makeKeyAndVisible()
         
         return true
     }
