@@ -58,10 +58,10 @@ class ChatViewModel {
                 }
         }.addDisposableTo(disposeBag)
         
-        NSNotificationCenter.defaultCenter().rx_notification(ChimeIONotifications.NewMessage.rawValue).subscribeNext { n in
+        NSNotificationCenter.defaultCenter().rx_notification(ChimeIONotification.NewMessageNotification.rawValue).subscribeNext { n in
             if let userInfo = n.userInfo where userInfo["message"] != nil {
                 var ms = self.messagesV.value
-                ms.append(userInfo["message"] as! Message)
+                ms.append(userInfo[ChimeIONotificationKey.NewMessageKey.rawValue] as! Message)
                 ms.sortInPlace {
                     return $1.createdAt!.compare($0.createdAt!) == .OrderedDescending
                 }

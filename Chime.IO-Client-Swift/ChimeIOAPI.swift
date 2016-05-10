@@ -12,15 +12,20 @@ import PromiseKit
 import SocketIOClientSwift
 import SwiftyJSON
 
-enum SocketEvent: String {
+private enum SocketEvent: String {
+    
+    // SocketIO events
     case Connect = "connect"
     case Disconnect = "disconnect"
     case Reconnect = "reconnect"
     case ReconnectAttempt = "reconnectAttempt"
     case Error = "error"
+    
+    // Feathers events
     case Authenticate = "authenticate"
     case Authenticated = "authenticated"
     case Unauthorized = "unauthorized"
+    case MessagesCreated = "messages created"
 }
 
 enum ChimeIOAPIError: ErrorType {
@@ -29,8 +34,13 @@ enum ChimeIOAPIError: ErrorType {
     case OtherError(String)
 }
 
-enum ChimeIONotifications: String {
-    case NewMessage = "messages created"
+enum ChimeIONotification: String {
+    case ConnectionStatusDidChangeNotification = "ConnectionStatusDidChangeNotification"
+    case NewMessageNotification = "NewMessageNotification"
+}
+
+enum ChimeIONotificationKey: String {
+    case NewMessageKey = "NewMessageKey"
 }
 
 
@@ -72,12 +82,15 @@ class ChimeIOAPI {
         
         socket.onAny { event in
             print(event)
-            if event.event == ChimeIONotifications.NewMessage.rawValue {
+            if event.event == SocketEvent.MessagesCreated.rawValue {
                 if let message = event.items?.firstObject {
                     if let m = self.messageMapper.map(message) {
-                        NSNotificationCenter.defaultCenter().postNotificationName(ChimeIONotifications.NewMessage.rawValue,
-                            object: self,
-                            userInfo: ["message": m])
+                        NSNotificationCenter
+                            .defaultCenter()
+                            .postNotificationName(
+                                ChimeIONotification.NewMessageNotification.rawValue,
+                                object: self,
+                                userInfo: [ChimeIONotificationKey.NewMessageKey.rawValue: m])
                     }
                 }
             }
