@@ -34,15 +34,22 @@ enum ChIOError: ErrorType {
     case OtherError(String)
 }
 
+enum ChIOStatus: String {
+    case NotConnected = "NotConnected"
+    case Closed = "Closed"
+    case Connecting = "Connecting"
+    case Connected = "Connected"
+}
+
 enum ChIONotification: String {
-    case ConnectionStatusDidChangeNotification = "ConnectionStatusDidChangeNotification"
+    case StatusDidChangeNotification = "StatusDidChangeNotification"
     case NewMessageNotification = "NewMessageNotification"
 }
 
 enum ChIONotificationKey: String {
+    case StatusKey = "StatusKey"
     case NewMessageKey = "NewMessageKey"
 }
-
 
 class ChIO {
     
@@ -63,10 +70,20 @@ class ChIO {
     private let userMapper = Mapper<User>()
     private let roomMapper = Mapper<Room>()
     private let messageMapper = Mapper<Message>()
-    var socket: SocketIOClient!
-    var apiKey: String!
-    var clientKey: String!
-    var baseParams: [String: String]!
+    private var socket: SocketIOClient!
+    private var apiKey: String!
+    private var clientKey: String!
+    private var baseParams: [String: String]!
+    private(set) var status: ChIOStatus = .NotConnected {
+        didSet {
+            if status != oldValue {
+                NSNotificationCenter.defaultCenter().postNotificationName(
+                    ChIONotification.StatusDidChangeNotification.rawValue,
+                    object: self,
+                    userInfo: [ChIONotificationKey.StatusKey.rawValue: status.rawValue])
+            }
+        }
+    }
     
     
     // MARK: - Constructors
@@ -81,32 +98,29 @@ class ChIO {
     
     // MARK: - Private Instance Methods
     private func registerEvents() {
-        
         socket.onAny { event in
-            print(event)
-            
             if let message = event.items?.firstObject, m = self.messageMapper.map(message)
                 where event.event == SocketEvent.MessagesCreated.rawValue {
                 NSNotificationCenter.defaultCenter().postNotificationName(
                     ChIONotification.NewMessageNotification.rawValue,
-                    object: self,
+                    object: nil,
                     userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
             }
         }
         socket.on(SocketEvent.Connect.rawValue) { result, ack in
-            print("default event handler: connect")
+            self.updateStatus(byEvent: SocketEvent.Connect)
         }
         socket.on(SocketEvent.Disconnect.rawValue) { result, ack in
-            print("default event handler: disconnect")
+            self.updateStatus(byEvent: SocketEvent.Disconnect)
         }
         socket.on(SocketEvent.Reconnect.rawValue) { result, ack in
-            print("default event handler: reconnect")
+            self.updateStatus(byEvent: SocketEvent.Reconnect)
         }
-        socket.on(SocketEvent.Reconnect.rawValue) { result, ack in
-            print("socket event handler: reconnectAttempt")
+        socket.on(SocketEvent.ReconnectAttempt.rawValue) { result, ack in
+            self.updateStatus(byEvent: SocketEvent.ReconnectAttempt)
         }
         socket.on(SocketEvent.Error.rawValue) { result, ack in
-            print("socket event handler: error")
+            self.updateStatus(byEvent: SocketEvent.Error)
         }
         
         socket.on(SocketEvent.Authenticated.rawValue) { result, ack in
@@ -117,6 +131,25 @@ class ChIO {
         }
     }
     
+    private func updateStatus(byEvent event: SocketEvent) {
+        var cStatus: ChIOStatus!
+        switch event {
+        case .Connect:
+            cStatus = .Connected
+        case .Reconnect:
+            cStatus = .Connecting
+        case .ReconnectAttempt:
+            cStatus = .Connecting
+        case .Disconnect:
+            cStatus = .Closed
+        case .Error:
+            cStatus = .Closed
+        default:
+            cStatus = .NotConnected
+        }
+        status = cStatus
+    }
+    
     
     // MARK: - Public Instance Methods
     func connect() -> Promise<()> {
@@ -124,6 +157,7 @@ class ChIO {
             socket.once(SocketEvent.Connect.rawValue) { result, ack in
                 fulfill()
             }
+            status = .Connecting
             socket.connect()
         }
     }
