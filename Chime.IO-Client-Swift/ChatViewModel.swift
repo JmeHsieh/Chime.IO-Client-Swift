@@ -59,9 +59,9 @@ class ChatViewModel {
         }.addDisposableTo(disposeBag)
         
         NSNotificationCenter.defaultCenter().rx_notification(ChIONotification.NewMessageNotification.rawValue).subscribeNext { n in
-            if let userInfo = n.userInfo where userInfo["message"] != nil {
+            if let u = n.userInfo, m = u[ChIONotificationKey.NewMessageKey.rawValue] as? Message {
                 var ms = self.messagesV.value
-                ms.append(userInfo[ChIONotificationKey.NewMessageKey.rawValue] as! Message)
+                ms.append(m)
                 ms.sortInPlace {
                     return $1.createdAt!.compare($0.createdAt!) == .OrderedDescending
                 }
