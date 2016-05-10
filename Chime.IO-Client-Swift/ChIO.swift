@@ -1,5 +1,5 @@
 //
-//  ChimeIOAPI.swift
+//  ChIO.swift
 //  Chime.IO-Client-Swift
 //
 //  Created by JmeHsieh on 4/18/16.
@@ -28,29 +28,29 @@ private enum SocketEvent: String {
     case MessagesCreated = "messages created"
 }
 
-enum ChimeIOAPIError: ErrorType {
+enum ChIOError: ErrorType {
     case GuardError(String)
     case JSONError(String)
     case OtherError(String)
 }
 
-enum ChimeIONotification: String {
+enum ChIONotification: String {
     case ConnectionStatusDidChangeNotification = "ConnectionStatusDidChangeNotification"
     case NewMessageNotification = "NewMessageNotification"
 }
 
-enum ChimeIONotificationKey: String {
+enum ChIONotificationKey: String {
     case NewMessageKey = "NewMessageKey"
 }
 
 
-class ChimeIOAPI {
+class ChIO {
     
     // MARK: - Singleton
-    static let sharedInstance: ChimeIOAPI = {
-        let instance = ChimeIOAPI(apiKey: "6c99cc19b2519e313157bd5b83256710bf413c0e",
-                                  clientKey: "bd099f8193e5d2e2396b3d3dc6b59ed7d044a1b1",
-                                  url: NSURL(string: "http://localhost:3030")!)
+    static let sharedInstance: ChIO = {
+        let instance = ChIO(apiKey: "6c99cc19b2519e313157bd5b83256710bf413c0e",
+                            clientKey: "bd099f8193e5d2e2396b3d3dc6b59ed7d044a1b1",
+                            url: NSURL(string: "localhost:3030")!)
         instance.baseParams = ["apiKey": instance.apiKey, "clientKey": instance.clientKey]
         instance.registerEvents()
         return instance
@@ -88,9 +88,9 @@ class ChimeIOAPI {
                         NSNotificationCenter
                             .defaultCenter()
                             .postNotificationName(
-                                ChimeIONotification.NewMessageNotification.rawValue,
+                                ChIONotification.NewMessageNotification.rawValue,
                                 object: self,
-                                userInfo: [ChimeIONotificationKey.NewMessageKey.rawValue: m])
+                                userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
                     }
                 }
             }
@@ -135,13 +135,13 @@ class ChimeIOAPI {
     private func _signup(username: String, _ email: String, _ password: String) -> Promise<User> {
         return Promise { fulfill, reject in
             guard username.characters.count > 0 else {
-                throw ChimeIOAPIError.GuardError("username should contains at least 6 characters.")
+                throw ChIOError.GuardError("username should contains at least 6 characters.")
             }
             guard email.containsString("@") else {
-                throw ChimeIOAPIError.GuardError("email should contains at least a @ character.")
+                throw ChIOError.GuardError("email should contains at least a @ character.")
             }
             guard password.characters.count >= 8 else {
-                throw ChimeIOAPIError.GuardError("password should be at least 8 characters long.")
+                throw ChIOError.GuardError("password should be at least 8 characters long.")
             }
             
             let data = ["username": username, "email": email, "password": password]
@@ -150,7 +150,7 @@ class ChimeIOAPI {
                 if let user = self.userMapper.map(json[1].rawValue) {
                     fulfill(user)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -170,11 +170,11 @@ class ChimeIOAPI {
                     let jwt = json[0]["token"].stringValue
                     fulfill((jwt, user))
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
             socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
-                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
+                reject(ChIOError.OtherError(SocketEvent.Unauthorized.rawValue))
             }
             
             let params = ["type": "local", "email": email, "password": password]
@@ -190,11 +190,11 @@ class ChimeIOAPI {
                     let jwt = json[0]["token"].stringValue
                     fulfill((jwt, user))
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
             socket.once(SocketEvent.Unauthorized.rawValue) { result, ack in
-                reject(ChimeIOAPIError.OtherError(SocketEvent.Unauthorized.rawValue))
+                reject(ChIOError.OtherError(SocketEvent.Unauthorized.rawValue))
             }
             
             let params = ["token": jwt]
@@ -211,7 +211,7 @@ class ChimeIOAPI {
                 if let room = self.roomMapper.map(json[1].rawValue) {
                     fulfill(room)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -224,7 +224,7 @@ class ChimeIOAPI {
                 if let rooms = self.roomMapper.mapArray(json[1]["data"].rawValue) {
                     fulfill(rooms)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -237,7 +237,7 @@ class ChimeIOAPI {
                 if let room = self.roomMapper.map(json[1].rawValue) {
                     fulfill(room)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -252,7 +252,7 @@ class ChimeIOAPI {
                 if let room = self.roomMapper.map(json[1].rawValue) {
                     fulfill(room)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -267,7 +267,7 @@ class ChimeIOAPI {
                 if let room = self.roomMapper.map(json[1].rawValue) {
                     fulfill(room)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -285,7 +285,7 @@ class ChimeIOAPI {
                 if let message = self.messageMapper.map(json[1].rawValue) {
                     fulfill(message)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -300,7 +300,7 @@ class ChimeIOAPI {
                 if let messages = self.messageMapper.mapArray(json[1]["data"].rawValue) {
                     fulfill(messages)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -313,7 +313,7 @@ class ChimeIOAPI {
                 if let message = self.messageMapper.map(json[1].rawValue) {
                     fulfill(message)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }
@@ -326,7 +326,7 @@ class ChimeIOAPI {
                 if let message = self.messageMapper.map(json[1].rawValue) {
                     fulfill(message)
                 } else {
-                    reject(ChimeIOAPIError.JSONError("ObjectMapper failed for result: \(result)"))
+                    reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
                 }
             }
         }

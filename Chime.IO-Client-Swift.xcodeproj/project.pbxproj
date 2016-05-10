@@ -18,8 +18,8 @@
 		985C5C791CC4954E00D2BFE8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C781CC4954E00D2BFE8 /* Assets.xcassets */; };
 		985C5C7C1CC4954E00D2BFE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 985C5C7A1CC4954E00D2BFE8 /* LaunchScreen.storyboard */; };
 		985C5C871CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C861CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift */; };
-		985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */; };
-		985C5C971CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */; };
+		985C5C961CC4984D00D2BFE8 /* ChIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChIO.swift */; };
+		985C5C971CC4984D00D2BFE8 /* ChIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985C5C951CC4984D00D2BFE8 /* ChIO.swift */; };
 		98B12B3A1CC72A230016F1E5 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6651CC675FA00C4C5D3 /* ObjectMapper.framework */; };
 		98B12B3B1CC72A230016F1E5 /* SocketIOClientSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF6601CC6344500C4C5D3 /* SocketIOClientSwift.framework */; };
 		98B12B3C1CC72A230016F1E5 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98EFF65B1CC6284200C4C5D3 /* SwiftyJSON.framework */; };
@@ -94,7 +94,7 @@
 		985C5C821CC4954E00D2BFE8 /* Chime.IO-Client-SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Chime.IO-Client-SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		985C5C861CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chime_IO_Client_SwiftTests.swift; sourceTree = "<group>"; };
 		985C5C881CC4954E00D2BFE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChimeIOAPI.swift; sourceTree = "<group>"; };
+		985C5C951CC4984D00D2BFE8 /* ChIO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChIO.swift; sourceTree = "<group>"; };
 		98B12B451CC73BBF0016F1E5 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		98B12B491CC791260016F1E5 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		98CF322E1CCA2D6D009EFB3B /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 				9840452C1CD0621700179DA3 /* RoomsViewController.swift */,
 				984045321CD1C0E300179DA3 /* ChatViewModel.swift */,
 				984045301CD1C0D500179DA3 /* ChatViewController.swift */,
-				985C5C911CC497CB00D2BFE8 /* ChimeIO */,
+				985C5C911CC497CB00D2BFE8 /* ChIO */,
 				985C5C751CC4954E00D2BFE8 /* Main.storyboard */,
 				985C5C781CC4954E00D2BFE8 /* Assets.xcassets */,
 				985C5C7A1CC4954E00D2BFE8 /* LaunchScreen.storyboard */,
@@ -190,14 +190,14 @@
 			path = "Chime.IO-Client-SwiftTests";
 			sourceTree = "<group>";
 		};
-		985C5C911CC497CB00D2BFE8 /* ChimeIO */ = {
+		985C5C911CC497CB00D2BFE8 /* ChIO */ = {
 			isa = PBXGroup;
 			children = (
 				98EFF65E1CC62C7700C4C5D3 /* Utility.swift */,
-				985C5C951CC4984D00D2BFE8 /* ChimeIOAPI.swift */,
+				985C5C951CC4984D00D2BFE8 /* ChIO.swift */,
 				985C5C981CC49A6D00D2BFE8 /* Model */,
 			);
-			name = ChimeIO;
+			name = ChIO;
 			sourceTree = "<group>";
 		};
 		985C5C981CC49A6D00D2BFE8 /* Model */ = {
@@ -356,7 +356,7 @@
 				98EFF6641CC63D5900C4C5D3 /* Room.swift in Sources */,
 				98EFF65F1CC62C7700C4C5D3 /* Utility.swift in Sources */,
 				98CF32331CCA5E50009EFB3B /* LoginViewModel.swift in Sources */,
-				985C5C961CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
+				985C5C961CC4984D00D2BFE8 /* ChIO.swift in Sources */,
 				985C5C721CC4954E00D2BFE8 /* AppDelegate.swift in Sources */,
 				9840452D1CD0621700179DA3 /* RoomsViewController.swift in Sources */,
 				984045331CD1C0E300179DA3 /* ChatViewModel.swift in Sources */,
@@ -369,7 +369,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				985C5C971CC4984D00D2BFE8 /* ChimeIOAPI.swift in Sources */,
+				985C5C971CC4984D00D2BFE8 /* ChIO.swift in Sources */,
 				985C5C871CC4954E00D2BFE8 /* Chime_IO_Client_SwiftTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

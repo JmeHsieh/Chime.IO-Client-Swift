@@ -62,7 +62,7 @@ class LoginViewModel {
                 .withLatestFrom(Driver.combineLatest(self.emailD, self.passwordD) { ($0, $1) })
                 .driveNext {
                     self.isloadingV.value = true
-                    ChimeIOAPI.sharedInstance.login($0, $1).then { (jwt, user) -> Void in
+                    ChIO.sharedInstance.login($0, $1).then { (jwt, user) -> Void in
                         self.isloadingV.value = false
                         o.onNext((jwt, user))
                         o.onCompleted()
@@ -84,7 +84,7 @@ class LoginViewModel {
                 })
                 .driveNext {
                     self.isloadingV.value = true
-                    ChimeIOAPI.sharedInstance.signup($0, $1, $2).then { (jwt, user) -> Void in
+                    ChIO.sharedInstance.signup($0, $1, $2).then { (jwt, user) -> Void in
                         self.isloadingV.value = false
                         o.onNext((jwt, user))
                         o.onCompleted()

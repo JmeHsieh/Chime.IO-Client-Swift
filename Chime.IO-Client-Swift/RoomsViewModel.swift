@@ -29,7 +29,7 @@ class RoomsViewModel {
                 .subscribeOn(MainScheduler.instance)
                 .subscribeNext { l in
                     self.isloadingV.value = true
-                    ChimeIOAPI.sharedInstance.getMyRooms().then { rms -> Void in
+                    ChIO.sharedInstance.getMyRooms().then { rms -> Void in
                         self.isloadingV.value = false
                         o.onNext(rms)
                     }

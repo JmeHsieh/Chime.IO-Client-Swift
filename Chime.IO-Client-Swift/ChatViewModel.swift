@@ -41,7 +41,7 @@ class ChatViewModel {
             .withLatestFrom(inputFieldTextD)
             .driveNext { [unowned self] in
                 self.ispostingV.value = true
-                ChimeIOAPI.sharedInstance.postMessage($0, inRoomID: roomID).then { m  -> Void in
+                ChIO.sharedInstance.postMessage($0, inRoomID: roomID).then { m  -> Void in
                     self.ispostingV.value = false
                     var ms = self.messagesV.value
                     let foundIndex = ms.indexOf { return $0.id == m.id }
@@ -58,10 +58,10 @@ class ChatViewModel {
                 }
         }.addDisposableTo(disposeBag)
         
-        NSNotificationCenter.defaultCenter().rx_notification(ChimeIONotification.NewMessageNotification.rawValue).subscribeNext { n in
+        NSNotificationCenter.defaultCenter().rx_notification(ChIONotification.NewMessageNotification.rawValue).subscribeNext { n in
             if let userInfo = n.userInfo where userInfo["message"] != nil {
                 var ms = self.messagesV.value
-                ms.append(userInfo[ChimeIONotificationKey.NewMessageKey.rawValue] as! Message)
+                ms.append(userInfo[ChIONotificationKey.NewMessageKey.rawValue] as! Message)
                 ms.sortInPlace {
                     return $1.createdAt!.compare($0.createdAt!) == .OrderedDescending
                 }
@@ -72,7 +72,7 @@ class ChatViewModel {
     
     func reloadMessages() {
         self.isreloadingV.value = true
-        ChimeIOAPI.sharedInstance.getMessages(roomID).then { ms -> Void in
+        ChIO.sharedInstance.getMessages(roomID).then { ms -> Void in
             self.isreloadingV.value = false
             self.messagesV.value = ms
         }.error { _ in

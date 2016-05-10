@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        ChimeIOAPI.sharedInstance.connect().then { return }
+        ChIO.sharedInstance.connect().then { return }
         
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
         window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
