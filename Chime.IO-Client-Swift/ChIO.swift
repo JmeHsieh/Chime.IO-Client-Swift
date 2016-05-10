@@ -48,9 +48,11 @@ class ChIO {
     
     // MARK: - Singleton
     static let sharedInstance: ChIO = {
+        let xipURL = NSURL(string: "http://192.168.0.102.xip.io:3030")!
+        let localURL = NSURL(string: "http://localhost:3030")!
         let instance = ChIO(apiKey: "6c99cc19b2519e313157bd5b83256710bf413c0e",
                             clientKey: "bd099f8193e5d2e2396b3d3dc6b59ed7d044a1b1",
-                            url: NSURL(string: "localhost:3030")!)
+                            url: localURL)
         instance.baseParams = ["apiKey": instance.apiKey, "clientKey": instance.clientKey]
         instance.registerEvents()
         return instance
@@ -82,17 +84,13 @@ class ChIO {
         
         socket.onAny { event in
             print(event)
-            if event.event == SocketEvent.MessagesCreated.rawValue {
-                if let message = event.items?.firstObject {
-                    if let m = self.messageMapper.map(message) {
-                        NSNotificationCenter
-                            .defaultCenter()
-                            .postNotificationName(
-                                ChIONotification.NewMessageNotification.rawValue,
-                                object: self,
-                                userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
-                    }
-                }
+            
+            if let message = event.items?.firstObject, m = self.messageMapper.map(message)
+                where event.event == SocketEvent.MessagesCreated.rawValue {
+                NSNotificationCenter.defaultCenter().postNotificationName(
+                    ChIONotification.NewMessageNotification.rawValue,
+                    object: self,
+                    userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
             }
         }
         socket.on(SocketEvent.Connect.rawValue) { result, ack in
