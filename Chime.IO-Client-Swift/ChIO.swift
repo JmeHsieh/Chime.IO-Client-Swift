@@ -7,10 +7,63 @@
 //
 
 import Foundation
+import Locksmith
 import ObjectMapper
 import PromiseKit
 import SocketIOClientSwift
 import SwiftyJSON
+
+
+
+//---------------//
+//  ChIOAccount  //
+//---------------//
+
+private let _Service = "__ChIO__"
+private let _InternalAccount = "__ChIOInternalAccount__"
+private enum ChIOAccountDataKey: String {
+    case Email = "ChIOAccountEmailKey"
+    case Password = "ChIOAccountPasswordKey"
+    case Jwt = "ChIOAccountJwtKey"
+}
+
+struct ChIOAccount:
+    ReadableSecureStorable,
+    CreateableSecureStorable,
+    DeleteableSecureStorable,
+GenericPasswordSecureStorable {
+    
+    // Custome
+    var email: String!
+    var password: String!
+    var jwt: String!
+    
+    // GenericPasswordSecureStorable
+    let service = _Service
+    var account: String { return email }
+    
+    // CreateableSecureStorable
+    var data: [String: AnyObject] {
+        return [ChIOAccountDataKey.Password.rawValue: password,
+                ChIOAccountDataKey.Jwt.rawValue: jwt]
+    }
+    
+    private init(email e: String) {
+        email = e
+    }
+    
+    init(email e: String, password p: String, jwt j: String) {
+        email = e
+        password = p
+        jwt = j
+    }
+}
+
+
+
+//------------//
+//  ChIO API  //
+//------------//
 
 private enum SocketEvent: String {
     
@@ -67,9 +120,8 @@ class ChIO {
     
     
     // MARK: - Properties
-    private let userMapper = Mapper<User>()
-    private let roomMapper = Mapper<Room>()
-    private let messageMapper = Mapper<Message>()
+    
+    // connection
     private var socket: SocketIOClient!
     private var apiKey: String!
     private var clientKey: String!
@@ -85,6 +137,14 @@ class ChIO {
         }
     }
     
+    // model
+    private let userMapper = Mapper<User>()
+    private let roomMapper = Mapper<Room>()
+    private let messageMapper = Mapper<Message>()
+    
+    // account
+    var account: ChIOAccount?
+    
     
     // MARK: - Constructors
     init(apiKey: String, clientKey: String, url: NSURL) {
@@ -93,6 +153,17 @@ class ChIO {
         self.socket = SocketIOClient(socketURL: url,
                                      options: [.Log(false), .ForceWebsockets(true)])
         self.registerEvents()
+        
+        // retrieve cached account if can
+        let internalData = Locksmith.loadDataForUserAccount(_InternalAccount, inService: _Service)
+        if let cachedEmail = internalData?[ChIOAccountDataKey.Email.rawValue] as? String {
+            var a = ChIOAccount(email: cachedEmail)
+            if let d = a.readFromSecureStore()?.data {
+                a.password = d[ChIOAccountDataKey.Password.rawValue] as! String
+                a.jwt = d[ChIOAccountDataKey.Jwt.rawValue] as! String
+                account = a
+            }
+        }
     }
     
     
@@ -150,6 +221,38 @@ class ChIO {
         status = cStatus
     }
     
+    private func updateAccount(byEmail e: String, password p: String, jwt j: String) {
+        
+        // update account
+        if var a = self.account {
+            if a.email == e {
+                a.password = p
+                a.jwt = j
+                do { try Locksmith.updateData(a.data, forUserAccount: a.account, inService: a.service) }
+                catch { print(error) }
+            } else {
+                do { try a.deleteFromSecureStore() } catch { print(error) }
+                do { try ChIOAccount(email: e, password: p, jwt: j).createInSecureStore() } catch { print(error) }
+            }
+        } else {
+            do { try ChIOAccount(email: e, password: p, jwt: j).createInSecureStore() } catch { print(error) }
+        }
+        
+        // cache email
+        do { try Locksmith.updateData([ChIOAccountDataKey.Email.rawValue: e],
+                                      forUserAccount: _InternalAccount,
+                                      inService: _Service) }
+        catch { print(error) }
+    }
+    
+    private func updateAccount(byEmail e: String, jwt j: String) {
+        if var a = self.account where a.email == e {
+            a.jwt = j
+            do { try Locksmith.updateData(a.data, forUserAccount: a.account, inService: a.service) }
+            catch { print(error) }
+        }
+    }
+    
     
     // MARK: - Public Instance Methods
     func connect() -> Promise<()> {
@@ -196,10 +299,11 @@ class ChIO {
     
     func login(email: String, _ password: String) -> Promise<(String, User)> {
         return Promise { fulfill, reject in
-            socket.once(SocketEvent.Authenticated.rawValue) { result, ack in
+            socket.once(SocketEvent.Authenticated.rawValue) { [unowned self] result, ack in
                 let json = JSON(result)
                 if let user = self.userMapper.map(json[0]["data"].rawValue) {
                     let jwt = json[0]["token"].stringValue
+                    self.updateAccount(byEmail: email, password: password, jwt: jwt)
                     fulfill((jwt, user))
                 } else {
                     reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
@@ -220,6 +324,7 @@ class ChIO {
                 let json = JSON(result)
                 if let user = self.userMapper.map(json[0]["data"].rawValue) {
                     let jwt = json[0]["token"].stringValue
+                    self.updateAccount(byEmail: user.email, jwt: jwt)
                     fulfill((jwt, user))
                 } else {
                     reject(ChIOError.JSONError("ObjectMapper failed for result: \(result)"))
@@ -363,6 +468,4 @@ class ChIO {
             }
         }
     }
-    
-    
 }
