@@ -178,19 +178,19 @@ class ChIO {
                     userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
             }
         }
-        socket.on(SocketEvent.Connect.rawValue) { result, ack in
+        socket.on(SocketEvent.Connect.rawValue) { [unowned self] result, ack in
             self.updateStatus(byEvent: SocketEvent.Connect)
         }
-        socket.on(SocketEvent.Disconnect.rawValue) { result, ack in
+        socket.on(SocketEvent.Disconnect.rawValue) { [unowned self] result, ack in
             self.updateStatus(byEvent: SocketEvent.Disconnect)
         }
-        socket.on(SocketEvent.Reconnect.rawValue) { result, ack in
+        socket.on(SocketEvent.Reconnect.rawValue) { [unowned self] result, ack in
             self.updateStatus(byEvent: SocketEvent.Reconnect)
         }
-        socket.on(SocketEvent.ReconnectAttempt.rawValue) { result, ack in
+        socket.on(SocketEvent.ReconnectAttempt.rawValue) { [unowned self] result, ack in
             self.updateStatus(byEvent: SocketEvent.ReconnectAttempt)
         }
-        socket.on(SocketEvent.Error.rawValue) { result, ack in
+        socket.on(SocketEvent.Error.rawValue) { [unowned self] result, ack in
             self.updateStatus(byEvent: SocketEvent.Error)
         }
         
