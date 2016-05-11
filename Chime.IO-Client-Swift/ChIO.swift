@@ -113,8 +113,6 @@ class ChIO {
         let instance = ChIO(apiKey: "6c99cc19b2519e313157bd5b83256710bf413c0e",
                             clientKey: "bd099f8193e5d2e2396b3d3dc6b59ed7d044a1b1",
                             url: localURL)
-        instance.baseParams = ["apiKey": instance.apiKey, "clientKey": instance.clientKey]
-        instance.registerEvents()
         return instance
     }()
     
@@ -122,10 +120,10 @@ class ChIO {
     // MARK: - Properties
     
     // connection
-    private var socket: SocketIOClient!
     private var apiKey: String!
     private var clientKey: String!
     private var baseParams: [String: String]!
+    private var socket: SocketIOClient!
     private(set) var status: ChIOStatus = .NotConnected {
         didSet {
             if status != oldValue {
@@ -144,14 +142,17 @@ class ChIO {
     
     // account
     var account: ChIOAccount?
+    var autoLoginOnConnect = true
     
     
     // MARK: - Constructors
     init(apiKey: String, clientKey: String, url: NSURL) {
         self.apiKey = apiKey
         self.clientKey = clientKey
+        self.baseParams = ["apiKey": apiKey, "clientKey": clientKey]
         self.socket = SocketIOClient(socketURL: url,
                                      options: [.Log(false), .ForceWebsockets(true)])
+        
         self.registerEvents()
         
         // retrieve cached account if can
@@ -170,8 +171,8 @@ class ChIO {
     // MARK: - Private Instance Methods
     private func registerEvents() {
         socket.onAny { event in
-            if let message = event.items?.firstObject, m = self.messageMapper.map(message)
-                where event.event == SocketEvent.MessagesCreated.rawValue {
+            if event.event == SocketEvent.MessagesCreated.rawValue,
+                let message = event.items?.firstObject, m = self.messageMapper.map(message) {
                 NSNotificationCenter.defaultCenter().postNotificationName(
                     ChIONotification.NewMessageNotification.rawValue,
                     object: nil,
@@ -179,26 +180,34 @@ class ChIO {
             }
         }
         socket.on(SocketEvent.Connect.rawValue) { [unowned self] result, ack in
+            print(SocketEvent.Connect.rawValue)
             self.updateStatus(byEvent: SocketEvent.Connect)
+            if self.autoLoginOnConnect, let a = self.account {
+                self.login(a.email, a.password)
+            }
         }
         socket.on(SocketEvent.Disconnect.rawValue) { [unowned self] result, ack in
+            print(SocketEvent.Disconnect.rawValue)
             self.updateStatus(byEvent: SocketEvent.Disconnect)
         }
         socket.on(SocketEvent.Reconnect.rawValue) { [unowned self] result, ack in
+            print(SocketEvent.Reconnect.rawValue)
             self.updateStatus(byEvent: SocketEvent.Reconnect)
         }
         socket.on(SocketEvent.ReconnectAttempt.rawValue) { [unowned self] result, ack in
+            print(SocketEvent.ReconnectAttempt.rawValue)
             self.updateStatus(byEvent: SocketEvent.ReconnectAttempt)
         }
         socket.on(SocketEvent.Error.rawValue) { [unowned self] result, ack in
+            print(SocketEvent.Error.rawValue)
             self.updateStatus(byEvent: SocketEvent.Error)
         }
         
         socket.on(SocketEvent.Authenticated.rawValue) { result, ack in
-            print("authenticated")
+            print(SocketEvent.Authenticated.rawValue)
         }
         socket.on(SocketEvent.Unauthorized.rawValue) { result, ack in
-            print("unauthorized")
+            print(SocketEvent.Unauthorized.rawValue)
         }
     }
     
