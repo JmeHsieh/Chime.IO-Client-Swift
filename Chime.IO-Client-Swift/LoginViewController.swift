@@ -185,6 +185,18 @@ class LoginViewController: UIViewController {
                 self.sendV.value = "Login"
             }
         }.addDisposableTo(disposeBag)
+        
+        // will-logout handler
+        NSNotificationCenter.defaultCenter()
+            .rx_notification(AppNotification.WillLogout.rawValue)
+            .asObservable()
+            .subscribeNext { _ in
+                self.emailTextField.text = nil
+                self.passwordTextField.text = nil
+                self.emailTextField.sendActionsForControlEvents(.EditingChanged)
+                self.passwordTextField.sendActionsForControlEvents(.EditingChanged)
+            }
+            .addDisposableTo(disposeBag)
     }
     
     override func didReceiveMemoryWarning() {
