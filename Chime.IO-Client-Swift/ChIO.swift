@@ -142,7 +142,6 @@ class ChIO {
     
     // account
     var account: ChIOAccount?
-    var autoLoginOnConnect = true
     
     
     // MARK: - Constructors
@@ -182,9 +181,6 @@ class ChIO {
         socket.on(SocketEvent.Connect.rawValue) { [unowned self] result, ack in
             print(SocketEvent.Connect.rawValue)
             self.updateStatus(byEvent: SocketEvent.Connect)
-            if self.autoLoginOnConnect, let a = self.account {
-                self.login(a.email, a.password)
-            }
         }
         socket.on(SocketEvent.Disconnect.rawValue) { [unowned self] result, ack in
             print(SocketEvent.Disconnect.rawValue)
