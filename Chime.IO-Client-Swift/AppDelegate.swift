@@ -6,19 +6,61 @@
 //  Copyright © 2016 JmeHsieh. All rights reserved.
 //
 
+import CWStatusBarNotification
+import RxSwift
 import UIKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    private let disposeBag = DisposeBag()
+    private let sn = CWStatusBarNotification()
+    private let snDuration = 2.0
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        ChIO.sharedInstance.connect().then { return }
+        // show connection status
+        sn.notificationAnimationInStyle = .Top
+        sn.notificationAnimationOutStyle = .Top
+        SharingManager.defaultManager.chioStatusOA.subscribeOn(MainScheduler.instance).subscribeNext {
+            switch $0 {
+            case .Connecting:
+                self.sn.notificationLabel?.backgroundColor = UIColor.orangeColor()
+                if self.sn.notificationIsShowing {
+                    self.sn.notificationLabel?.text = "Connecting..."
+                } else {
+                    self.sn.displayNotificationWithMessage("Connecting..", completion: {})
+                }
+            case .Connected:
+                self.sn.notificationLabel?.backgroundColor = UIColor(red: 0.0, green: 122.0/255.0, blue: 1.0, alpha: 1.0)
+                if self.sn.notificationIsShowing {
+                    self.sn.notificationLabel?.text = "Connected"
+                    dispatch_after(dispatch_time(
+                        DISPATCH_TIME_NOW, Int64(self.snDuration * Double(NSEC_PER_SEC))),
+                    dispatch_get_main_queue()) {
+                        self.sn.dismissNotification()
+                    }
+                } else {
+                    self.sn.displayNotificationWithMessage("Connected!", forDuration: self.snDuration)
+                }
+            default:
+                self.sn.notificationLabel?.backgroundColor = UIColor.darkGrayColor()
+                if self.sn.notificationIsShowing {
+                    self.sn.notificationLabel?.text = "Not Connected"
+                } else {
+                    self.sn.displayNotificationWithMessage("Not Connected", completion: {})
+                }
+            }
+        }.addDisposableTo(disposeBag)
         
+        // connect to ChIO server
+        ChIO.sharedInstance.connect()
+        
+        // main
+        let navController = UINavigationController(rootViewController: LoginViewController())
         window = UIWindow(frame: UIScreen.mainScreen().bounds)
-        window?.rootViewController = UINavigationController(rootViewController: LoginViewController())
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
         
         return true
