@@ -144,10 +144,11 @@ class LoginViewController: UIViewController {
         }.addDisposableTo(disposeBag)
         
         viewModel.loginOA.subscribeCompleted {
-            print("go to next page")
-            dispatch_async(dispatch_get_main_queue()) {
-                print(self.navigationController)
-                self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+            if self == self.navigationController?.topViewController {
+                dispatch_async(dispatch_get_main_queue()) {
+                    print("go to next page")
+                    self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+                }
             }
         }.addDisposableTo(disposeBag)
         
@@ -163,10 +164,25 @@ class LoginViewController: UIViewController {
         }.addDisposableTo(disposeBag)
         
         viewModel.signupOA.subscribeCompleted {
-            print("go to next page")
-            dispatch_async(dispatch_get_main_queue()) {
-                print(self.navigationController)
-                self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+            if self == self.navigationController?.topViewController {
+                dispatch_async(dispatch_get_main_queue()) {
+                    print("go to next page")
+                    self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+                }
+            }
+        }.addDisposableTo(disposeBag)
+        
+        // auto loign when connected
+        SharingManager.defaultManager.chioStatusOA.subscribeOn(MainScheduler.instance).subscribeNext {
+            if $0 == .Connected, let a = ChIO.sharedInstance.account {
+                
+                // hacking rx to manually trigger UIControl.rx_value binding
+                self.emailTextField.text = a.email
+                self.passwordTextField.text = a.password
+                self.emailTextField.sendActionsForControlEvents(.EditingChanged)
+                self.passwordTextField.sendActionsForControlEvents(.EditingChanged)
+                
+                self.sendV.value = "Login"
             }
         }.addDisposableTo(disposeBag)
     }
