@@ -13,8 +13,9 @@ import RxSwift
 class SharingManager {
     
     static let defaultManager = SharingManager()
-    var currentUserInfo: (String, User)?
+    private let disposeBag = DisposeBag()
     var chioStatusOA: Observable<ChIOStatus>!
+    var currentUserInfo: (String, User)?
     
     
     // MARK: - Constructors
@@ -37,5 +38,12 @@ class SharingManager {
                     }
                 } else { return ChIOStatus.Closed }
             }
+        
+        // will-logout handler
+        NSNotificationCenter.defaultCenter()
+            .rx_notification(AppNotification.WillLogout.rawValue)
+            .asObservable()
+            .subscribeNext { _ in self.currentUserInfo = nil }
+            .addDisposableTo(disposeBag)
     }
 }
