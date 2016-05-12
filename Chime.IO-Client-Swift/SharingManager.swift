@@ -21,9 +21,9 @@ class SharingManager {
     
     init() {
         chioStatusOA = NSNotificationCenter.defaultCenter()
-            .rx_notification(ChIONotification.StatusDidChangeNotification.rawValue)
+            .rx_notification(ChIONotification.StatusDidChange.rawValue)
             .map { n in
-                if let u = n.userInfo, s = u[ChIONotificationKey.StatusKey.rawValue] as? String {
+                if let u = n.userInfo, s = u[ChIONotificationKey.Status.rawValue] as? String {
                     return s
                 } else { return "" }
             }

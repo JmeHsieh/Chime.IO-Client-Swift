@@ -95,13 +95,13 @@ enum ChIOStatus: String {
 }
 
 enum ChIONotification: String {
-    case StatusDidChangeNotification = "StatusDidChangeNotification"
-    case NewMessageNotification = "NewMessageNotification"
+    case StatusDidChange = "StatusDidChangeNotification"
+    case NewMessage = "NewMessageNotification"
 }
 
 enum ChIONotificationKey: String {
-    case StatusKey = "StatusKey"
-    case NewMessageKey = "NewMessageKey"
+    case Status = "StatusKey"
+    case NewMessage = "NewMessageKey"
 }
 
 class ChIO {
@@ -128,9 +128,9 @@ class ChIO {
         didSet {
             if status != oldValue {
                 NSNotificationCenter.defaultCenter().postNotificationName(
-                    ChIONotification.StatusDidChangeNotification.rawValue,
+                    ChIONotification.StatusDidChange.rawValue,
                     object: self,
-                    userInfo: [ChIONotificationKey.StatusKey.rawValue: status.rawValue])
+                    userInfo: [ChIONotificationKey.Status.rawValue: status.rawValue])
             }
         }
     }
@@ -174,9 +174,9 @@ class ChIO {
             if event.event == SocketEvent.MessagesCreated.rawValue,
                 let message = event.items?.firstObject, m = self.messageMapper.map(message) {
                 NSNotificationCenter.defaultCenter().postNotificationName(
-                    ChIONotification.NewMessageNotification.rawValue,
+                    ChIONotification.NewMessage.rawValue,
                     object: nil,
-                    userInfo: [ChIONotificationKey.NewMessageKey.rawValue: m])
+                    userInfo: [ChIONotificationKey.NewMessage.rawValue: m])
             }
         }
         socket.on(SocketEvent.Connect.rawValue) { [unowned self] result, ack in
