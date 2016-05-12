@@ -10,14 +10,20 @@ import CWStatusBarNotification
 import RxSwift
 import UIKit
 
+enum AppNotification: String {
+    case WillLogout = "AppWillLogOut"
+    case DidLogout = "AppDidLogOut"
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    var window: UIWindow?
+    
     private let disposeBag = DisposeBag()
     private let sn = CWStatusBarNotification()
     private let snDuration = 2.0
-    var window: UIWindow?
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         // show connection status
@@ -54,8 +60,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }.addDisposableTo(disposeBag)
         
-        // connect to ChIO server
+        // connect to server
         ChIO.sharedInstance.connect()
+        
+        // will-logout handler
+        NSNotificationCenter.defaultCenter()
+            .rx_notification(AppNotification.WillLogout.rawValue)
+            .asObservable()
+            .subscribeNext { _ in ChIO.sharedInstance.logout() }
+            .addDisposableTo(disposeBag)
         
         // main
         let navController = UINavigationController(rootViewController: LoginViewController())
