@@ -14,18 +14,28 @@ class SharingManager {
     
     static let defaultManager = SharingManager()
     var currentUserInfo: (String, User)?
-    var chioStatusOA: Observable<String>!
+    var chioStatusOA: Observable<ChIOStatus>!
     
     
     // MARK: - Constructors
-    
     init() {
         chioStatusOA = NSNotificationCenter.defaultCenter()
             .rx_notification(ChIONotification.StatusDidChange.rawValue)
             .map { n in
                 if let u = n.userInfo, s = u[ChIONotificationKey.Status.rawValue] as? String {
-                    return s
-                } else { return "" }
+                    switch s {
+                    case ChIOStatus.NotConnected.rawValue:
+                        return .NotConnected
+                    case ChIOStatus.Closed.rawValue:
+                        return .Closed
+                    case ChIOStatus.Connecting.rawValue:
+                        return .Connecting
+                    case ChIOStatus.Connected.rawValue:
+                        return .Connected
+                    default:
+                        return .Closed
+                    }
+                } else { return ChIOStatus.Closed }
             }
     }
 }
