@@ -270,6 +270,13 @@ class ChIO {
         }
     }
     
+    func logout() {
+        if let a = account {
+            do { try a.deleteFromSecureStore() } catch { print(error) }
+            do { try Locksmith.deleteDataForUserAccount(_InternalAccount, inService: _Service) } catch { print(error) }
+        }
+    }
+    
     
     // MARK: - User API
     private func _signup(username: String, _ email: String, _ password: String) -> Promise<User> {
