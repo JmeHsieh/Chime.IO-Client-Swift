@@ -122,7 +122,7 @@ class ChIO {
     // connection
     private var apiKey: String!
     private var clientKey: String!
-    private var baseParams: [String: String]!
+    private var baseParams: [String: AnyObject]!
     private var socket: SocketIOClient!
     private(set) var status: ChIOStatus = .NotConnected {
         didSet {
