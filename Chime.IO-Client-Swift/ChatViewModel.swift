@@ -41,7 +41,7 @@ class ChatViewModel {
             .withLatestFrom(inputFieldTextD)
             .driveNext { [unowned self] in
                 self.ispostingV.value = true
-                ChIO.sharedInstance.postMessage($0, inRoomID: roomID).then { m  -> Void in
+                ChIO.sharedInstance.postMessage($0, inRoomID: roomID).then { m -> Void in
                     self.ispostingV.value = false
                     var ms = self.messagesV.value
                     let foundIndex = ms.indexOf { return $0.id == m.id }

@@ -97,7 +97,7 @@ class ChatViewController: UIViewController {
                         completion: { _ in
                             let maxOffset = CGPointMake(
                                 self.tableView.contentOffset.x,
-                                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0))
+                                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0) - self.tableView.contentInset.top)
                             self.tableView.setContentOffset(maxOffset, animated: true)
                     })
                 }
@@ -133,17 +133,19 @@ class ChatViewController: UIViewController {
             (row, message, cell) in
             
             if let currentUser = SharingManager.defaultManager.currentUserInfo?.1 where
-                message.senderID == currentUser.id {
+                message.sender?.id == currentUser.id {
                 cell.textLabel?.textAlignment = .Right
                 cell.textLabel?.text = message.text
             } else {
                 cell.textLabel?.textAlignment = .Left
-                cell.textLabel?.text = "\(message.senderID.substringFromIndex(message.senderID.endIndex.advancedBy(-4)))>>  \(message.text)"
+                cell.textLabel?.text = "\(message.sender?.username ?? ""):  \(message.text)"
             }
         }.addDisposableTo(viewModel.disposeBag)
         
         viewModel.messagesD.driveNext { [unowned self] _ in
-            let maxOffset = CGPointMake(0, max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0))
+            let maxOffset = CGPointMake(
+                0,
+                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0) - self.tableView.contentInset.top)
             self.tableView.setContentOffset(maxOffset, animated: true)
         }.addDisposableTo(viewModel.disposeBag)
         
