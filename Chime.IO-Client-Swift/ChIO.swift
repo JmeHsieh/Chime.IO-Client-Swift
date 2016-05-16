@@ -353,9 +353,11 @@ class ChIO {
     
     
     // MARK: - Room API
-    func createRoom() -> Promise<Room> {
+    func createRoom(withReceiverEmails emails: [String] = []) -> Promise<Room> {
         return Promise { fulfill, reject in
-            socket.emitWithAck("rooms::create", [:], baseParams)(timeoutAfter: 0) { result in
+            var params = baseParams
+            params["receiverEmails"] = emails
+            socket.emitWithAck("rooms::create", [:], params)(timeoutAfter: 0) { result in
                 let json = JSON(result)
                 if let room = self.roomMapper.map(json[1].rawValue) {
                     fulfill(room)
