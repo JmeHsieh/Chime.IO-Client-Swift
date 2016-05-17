@@ -65,7 +65,6 @@ class LoginViewModel {
                     ChIO.sharedInstance.login($0, $1).then { (jwt, user) -> Void in
                         self.isloadingV.value = false
                         o.onNext((jwt, user))
-                        o.onCompleted()
                     }.error { e in
                         self.isloadingV.value = false
                         o.onNext(nil)
@@ -87,7 +86,6 @@ class LoginViewModel {
                     ChIO.sharedInstance.signup($0, $1, $2).then { (jwt, user) -> Void in
                         self.isloadingV.value = false
                         o.onNext((jwt, user))
-                        o.onCompleted()
                     }.error { e in
                         self.isloadingV.value = false
                         o.onNext(nil)

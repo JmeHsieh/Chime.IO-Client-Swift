@@ -10,12 +10,13 @@ import Foundation
 import RxCocoa
 import RxSwift
 
+typealias SignedUserInfo = (String, User)
 class SharingManager {
     
     static let defaultManager = SharingManager()
     private let disposeBag = DisposeBag()
     var chioStatusOA: Observable<ChIOStatus>!
-    var currentUserInfo: (String, User)?
+    var currentUserInfo: SignedUserInfo?
     
     
     // MARK: - Constructors

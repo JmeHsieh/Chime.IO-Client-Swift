@@ -132,43 +132,19 @@ class LoginViewController: UIViewController {
                                    send: sendD!,
                                    sendButtonEnabled: sendButton.rx_enabled)
         
-        viewModel.loginOA.subscribeNext {
-            if let userinfo = $0 {
-                print("login succeed")
-                print("jwt \(userinfo.0)")
-                print("user \(userinfo.1)")
-                SharingManager.defaultManager.currentUserInfo = userinfo
+        viewModel.loginOA.subscribeNext { [unowned self] in
+            if let userInfo = $0 {
+                self.handleSignedUserInfo(userInfo)
             } else {
                 print("login failed")
             }
         }.addDisposableTo(disposeBag)
         
-        viewModel.loginOA.subscribeCompleted {
-            if self == self.navigationController?.topViewController {
-                dispatch_async(dispatch_get_main_queue()) {
-                    print("go to next page")
-                    self.navigationController?.pushViewController(RoomsViewController(), animated: true)
-                }
-            }
-        }.addDisposableTo(disposeBag)
-        
         viewModel.signupOA.subscribeNext {
-            if let userinfo = $0 {
-                print("signup succeed")
-                print("jwt \(userinfo.0)")
-                print("user \(userinfo.1)")
-                SharingManager.defaultManager.currentUserInfo = userinfo
+            if let userInfo = $0 {
+                self.handleSignedUserInfo(userInfo)
             } else {
                 print("signup failed")
-            }
-        }.addDisposableTo(disposeBag)
-        
-        viewModel.signupOA.subscribeCompleted {
-            if self == self.navigationController?.topViewController {
-                dispatch_async(dispatch_get_main_queue()) {
-                    print("go to next page")
-                    self.navigationController?.pushViewController(RoomsViewController(), animated: true)
-                }
             }
         }.addDisposableTo(disposeBag)
         
@@ -201,6 +177,19 @@ class LoginViewController: UIViewController {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    
+    // MARK: - Private Methods
+    
+    func handleSignedUserInfo(userInfo: SignedUserInfo) {
+        SharingManager.defaultManager.currentUserInfo = userInfo
+        if self == self.navigationController?.topViewController {
+            dispatch_async(dispatch_get_main_queue()) {
+                print("go to next page")
+                self.navigationController?.pushViewController(RoomsViewController(), animated: true)
+            }
+        }
     }
 }
 
