@@ -94,12 +94,7 @@ class ChatViewController: UIViewController {
                             self.inputFieldBottomConstraint?.updateOffset(-kbHeight)
                             self.view.layoutIfNeeded()
                         },
-                        completion: { _ in
-                            let maxOffset = CGPointMake(
-                                self.tableView.contentOffset.x,
-                                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0) - self.tableView.contentInset.top)
-                            self.tableView.setContentOffset(maxOffset, animated: true)
-                    })
+                        completion: { _ in self.adjustTableViewOffset(true) })
                 }
         }.addDisposableTo(disposeBag)
         
@@ -142,13 +137,18 @@ class ChatViewController: UIViewController {
             }
         }.addDisposableTo(viewModel.disposeBag)
         
-        viewModel.messagesD.driveNext { [unowned self] _ in
-            let maxOffset = CGPointMake(
-                0,
-                max(self.tableView.contentSize.height-self.tableView.bounds.size.height, 0) - self.tableView.contentInset.top)
-            self.tableView.setContentOffset(maxOffset, animated: true)
-        }.addDisposableTo(viewModel.disposeBag)
+        viewModel.messagesD
+            .driveNext { [unowned self] _ in self.adjustTableViewOffset(true) }
+            .addDisposableTo(viewModel.disposeBag)
         
         viewModel.reloadMessages()
+    }
+    
+    // MARK: - Private Methods
+    private func adjustTableViewOffset(animated: Bool) {
+        let ctHeight = self.tableView.contentSize.height
+        let vsHeight = self.tableView.frame.size.height - self.tableView.contentInset.top - self.tableView.contentInset.bottom
+        let offset = CGPointMake(self.tableView.contentOffset.x, max(ctHeight-vsHeight, 0) - self.tableView.contentInset.top)
+        self.tableView.setContentOffset(offset, animated: animated)
     }
 }
